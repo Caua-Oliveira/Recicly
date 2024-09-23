@@ -89,6 +89,7 @@ def sign_up():
     password = input("Password: ")
     cpf = input("CPF: ")
     new_user = user.User(name, email, password, cpf)
+    
     if save_user_to_db(new_user):
         print("User saved successfully.")
         u_list.append_user(new_user)

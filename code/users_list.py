@@ -1,4 +1,4 @@
-from user import User, fetch_user_by_email, save_user_to_db, delete_user_from_db, connect_to_db
+from user import User, save_user_to_db, delete_user_from_db, connect_to_db
 
 
 class UserNode:
