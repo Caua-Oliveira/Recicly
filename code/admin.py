@@ -23,8 +23,9 @@ class Admin:
                 store_list.remove(store)
                 break
 
-    def add_points(self, user, amount):
-        user.earn_points(amount)
+    def add_collection_location_credentials(self, collection_location, login_id, login_password):
+        collection_location.login_id = login_id
+        collection_location.login_password = login_password
 
     def __str__(self):
         return f"Admin: {self.name}, Email: {self.email}"

@@ -1,4 +1,4 @@
-from statistics import UserStatistics
+from user_statistics import UserStatistics
 import bcrypt
 from database_connection import *
 

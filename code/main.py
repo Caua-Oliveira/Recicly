@@ -8,6 +8,7 @@ import user
 from users_list import UserLinkedList
 from database_connection import *
 
+
 # Initialize global variables
 def initialize_global_data():
     global my_coords
@@ -26,7 +27,7 @@ def initialize_global_data():
 initialize_global_data()
 
 def initialize_stores():
-    """Initialize sample stores and coupons."""
+
     store1 = Store("Green Store", "A store for eco-friendly products")
     store1.add_coupon("10% Off", "10% off on all items", 50, "GREEN10")
     store1.add_coupon("Free Shipping", "Free shipping on orders over $50", 30, "FREESHIP")
@@ -40,7 +41,7 @@ def initialize_stores():
 initialize_stores()
 
 def fetch_recycling_locations():
-    """Fetch recycling locations from the provided URL and return the data."""
+
     url = "https://geo.salvador.ba.gov.br/arcgis/rest/services/Hosted/cooperativas_p/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"
     try:
         with urllib.request.urlopen(url) as response:
@@ -50,7 +51,7 @@ def fetch_recycling_locations():
         return []
 
 def display_recycling_locations():
-    """Display recycling locations and their distances from the user's current location."""
+
     features = fetch_recycling_locations()
 
     # Calculate distance for each feature and store it
@@ -82,7 +83,7 @@ def display_recycling_locations():
 
 
 def sign_up():
-    """Handle user sign-up."""
+
     print("Sign Up")
     name = input("Name: ")
     email = input("Email: ")
@@ -97,7 +98,7 @@ def sign_up():
         print("Failed to save user. Please try again.")
 
 def sign_in():
-    """Handle user sign-in and return the user if credentials are valid."""
+
     print("Sign In")
     email = input("Email: ")
     password = input("Password: ")
@@ -110,7 +111,7 @@ def sign_in():
         return None
 
 def deliver_trash(user_obj):
-    """Record trash delivery and update user statistics."""
+
     print("Deliver Trash")
     try:
         amount = float(input("Enter the amount of trash delivered (kg): "))
@@ -127,7 +128,7 @@ def deliver_trash(user_obj):
         print("Invalid amount entered.")
 
 def view_statistics(user_obj):
-    """Display user statistics."""
+
     print(f"Statistics for {user_obj.name}:")
     stats = user_obj.statistics
     print(f"Total trash delivered: {stats.total_trash_amount} kg")
@@ -137,13 +138,13 @@ def view_statistics(user_obj):
     print(f"Number of trades: {stats.number_of_trades}")
 
 def view_ranking_by_trash_amount():
-    """Display user ranking based on trash amount."""
+
     print("User Ranking:")
     # This section needs actual implementation of user ranking
     u_list.display_rankings()
 
 def view_stores_and_coupons():
-    """Display available stores and their coupons."""
+
     print("Available Stores and Coupons:")
     for store in stores:
         print(f"\nStore: {store.name}\nBio: {store.bio}")
@@ -151,7 +152,7 @@ def view_stores_and_coupons():
             print(f"  {coupon_name}: {coupon.bio} - {coupon.price} points")
 
 def redeem_coupon(user_obj):
-    """Allow user to redeem a coupon from a store."""
+
     store_name = input("Enter the store name to redeem a coupon: ")
     for store in stores:
         if store.name == store_name:
@@ -165,7 +166,7 @@ def redeem_coupon(user_obj):
     print("Store not found.")
 
 def admin_actions():
-    """Handle actions available to the admin."""
+
     print("Admin Actions")
     admin_email = input("Enter admin email: ")
     admin_password = input("Enter admin password: ")
@@ -173,7 +174,7 @@ def admin_actions():
         if admin.email == admin_email and admin.verify_password(admin_password):
             print(f"Welcome, {admin.name}")
             while True:
-                action = input("1. Add Store\n2. Remove Store\n3. Add Points to User\n4. Logout\nChoose an action: ")
+                action = input("1. Add Store\n2. Remove Store\n3. Logout\nChoose an action: ")
                 if action == "1":
                     store_name = input("Store Name: ")
                     store_bio = input("Store Bio: ")
@@ -184,24 +185,37 @@ def admin_actions():
                     admin.remove_store(stores, store_name)
                     print(f"Store {store_name} removed.")
                 elif action == "3":
-                    user_email = input("Enter user's email: ")
-                    user_obj = user.fetch_user_by_email(user_email)
-                    if user_obj:
-                        points = int(input(f"Enter points to add for {user_obj.name}: "))
-                        admin.add_points(user_obj, points)
-                        print(f"{points} points added to {user_obj.name}")
-                    else:
-                        print("User not found.")
-                elif action == "4":
                     print("Logging out...")
                     break
         else:
             print("Invalid admin credentials.")
 
+def collection_location_actions():
+    login_id = input("Enter the login ID: ")
+    login_password = input("Enter the login password: ")
+    collection_location_obj = fetch_collection_location_by_login_id(login_id)
+    if collection_location_obj:
+        if collection_location_obj.login_id == login_id and collection_location_obj.login_password == login_password:
+            while True:
+                action = input("1. Deliver Trash\n2. View Statistics\n3. Logout\nChoose an action: ")
+                if action == "1":
+                    collection_location_obj.deliver_trash()
+                elif action == "2":
+                    print(f"Statistics for {collection_location_obj.name}:")
+                    print(f"Total trash received: {collection_location_obj.statistics['total_trash_received']} kg")
+                    print("Total trash received by type:")
+                    for trash_type, amount in collection_location_obj.statistics['total_trash_received_by_type'].items():
+                        print(f"{trash_type.capitalize()}: {amount} kg")
+                elif action == "3":
+                    print("Logging out...")
+        else:
+            print("Invalid credentials.")
+    else:
+        print("Collection location not found.")
 def main():
-    """Main function to drive the application."""
+
     while True:
-        action = input("1. Sign Up\n2. Sign In\n3. Admin Login\n4. View Recycling Locations\n5. Exit\nChoose an action: ")
+        action = input("1. Sign Up\n2. Sign In\n3. Admin Login\n4. View Recycling Locations\n5.Collection Location Login\n6. Exit\nChoose an action: ")
         if action == "1":
             sign_up()
         elif action == "2":
@@ -227,6 +241,8 @@ def main():
         elif action == "4":
             display_recycling_locations()
         elif action == "5":
+            collection_location_actions()
+        elif action == "6":
             print("Exiting...")
             break
 

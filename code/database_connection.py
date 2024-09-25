@@ -80,3 +80,6 @@ def delete_user_from_db(cpf):
 
     cursor.close()
     db.close()
+
+def fetch_collection_location_by_login_id(login_id):
+    return
