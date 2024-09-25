@@ -39,7 +39,7 @@ def fetch_user_by_email(email):
     cursor = db.cursor(dictionary=True)
 
     sql = "SELECT * FROM users WHERE email = %s"
-    cursor.execute(sql, (email))
+    cursor.execute(sql, (email,))
 
     result = cursor.fetchone()
 
