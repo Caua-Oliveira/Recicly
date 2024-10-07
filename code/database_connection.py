@@ -6,9 +6,9 @@ def connect_to_db():
     try:
         return mysql.connector.connect(
             host="sql10.freesqldatabase.com",  # Your public IP address
-            user="sql10732886",
-            password="GDgRUaCU1w",
-            database="sql10732886"
+            user="sql10733436",
+            password="zQW47Jrau6",
+            database="sql10733436"
         )
     except Exception as e:
         print(f"Error connecting to database: {e}")
