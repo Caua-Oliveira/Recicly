@@ -1,4 +1,5 @@
-from user import User, save_user_to_db, delete_user_from_db, connect_to_db
+from user import User
+from database_connection import *
 
 
 class UserNode:

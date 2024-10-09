@@ -4,10 +4,9 @@ import geocoder
 from geopy.distance import geodesic
 from store import Store
 from admin import Admin
-import user
 from users_list import UserLinkedList
 from database_connection import *
-
+from user import User
 
 # Initialize global variables
 def initialize_global_data():
@@ -15,19 +14,17 @@ def initialize_global_data():
     ip = geocoder.ip('me')
     my_coords = ip.latlng
 
-    global u_list
-    u_list = UserLinkedList()
-
     global stores
     stores = []
 
     global admins
-    admins = [Admin("Admin", "2", "2")]
+    admins = [Admin("Admin", "admin@example.com", "admin_password")]
+
 
 initialize_global_data()
 
-def initialize_stores():
 
+def initialize_stores():
     store1 = Store("Green Store", "A store for eco-friendly products")
     store1.add_coupon("10% Off", "10% off on all items", 50, "GREEN10")
     store1.add_coupon("Free Shipping", "Free shipping on orders over $50", 30, "FREESHIP")
@@ -38,10 +35,76 @@ def initialize_stores():
 
     stores.extend([store1, store2])
 
+
 initialize_stores()
 
-def fetch_recycling_locations():
 
+# The fetch_recycling_locations and display_recycling_locations functions remain unchanged
+
+def sign_up():
+    print("Sign Up")
+    name = input("Name: ")
+    email = input("Email: ")
+    password = input("Password: ")
+    cpf = input("CPF: ")
+    new_user = User(name, email, password, cpf)
+
+    if save_user_to_db(new_user):
+        print("User saved successfully.")
+    else:
+        print("Failed to save user. Please try again.")
+
+
+def sign_in():
+    print("Sign In")
+    email = input("Email: ")
+    password = input("Password: ")
+    user_obj = fetch_user_by_email(email)
+    if user_obj and user_obj.verify_password(password):
+        print(f"Welcome back, {user_obj.name}!")
+        return user_obj
+    else:
+        print("Invalid credentials.")
+        return None
+
+
+def deliver_trash(user_obj):
+    print("Deliver Trash")
+    try:
+        amount = float(input("Enter the amount of trash delivered (kg): "))
+        trash_type = input("Enter the type of trash (plastic/metal/paper/glass/organic): ").lower()
+        if trash_type in user_obj.statistics.trash_by_type:
+            user_obj.statistics.trash_by_type[trash_type] += amount
+            user_obj.statistics.total_trash_amount += amount
+            points_earned = int(amount * 10)
+            user_obj.statistics.add_points(points_earned)
+            update_user_in_db(user_obj)  # Update user data in Firebase
+            print(f"Trash delivered successfully! You earned {points_earned} points.")
+        else:
+            print("Invalid trash type.")
+    except ValueError:
+        print("Invalid amount entered.")
+
+
+def view_statistics(user_obj):
+    print(f"Statistics for {user_obj.name}:")
+    stats = user_obj.statistics
+    print(f"Total trash delivered: {stats.total_trash_amount} kg")
+    print(f"Points available: {stats.current_points}")
+    print(f"All-time points: {stats.all_time_points}")
+    print(f"Points traded: {stats.points_traded}")
+    print(f"Number of trades: {stats.number_of_trades}")
+
+
+def view_ranking_by_trash_amount():
+    print("User Ranking:")
+    # This section needs actual implementation of user ranking
+    # You might want to fetch all users from Firebase and sort them by trash amount
+
+
+# The view_stores_and_coupons function remains unchanged
+
+def fetch_recycling_locations():
     url = "https://geo.salvador.ba.gov.br/arcgis/rest/services/Hosted/cooperativas_p/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"
     try:
         with urllib.request.urlopen(url) as response:
@@ -51,7 +114,6 @@ def fetch_recycling_locations():
         return []
 
 def display_recycling_locations():
-
     features = fetch_recycling_locations()
 
     # Calculate distance for each feature and store it
@@ -81,70 +143,7 @@ def display_recycling_locations():
         print(f"Coordinates: {coordinates}")
         print(f"Distance from your location: {distance:.2f} km\n")
 
-
-def sign_up():
-
-    print("Sign Up")
-    name = input("Name: ")
-    email = input("Email: ")
-    password = input("Password: ")
-    cpf = input("CPF: ")
-    new_user = user.User(name, email, password, cpf)
-    
-    if save_user_to_db(new_user):
-        print("User saved successfully.")
-        u_list.append_user(new_user)
-    else:
-        print("Failed to save user. Please try again.")
-
-def sign_in():
-
-    print("Sign In")
-    email = input("Email: ")
-    password = input("Password: ")
-    user_obj = fetch_user_by_email(email)
-    if user_obj and user_obj.verify_password(password):
-        print(f"Welcome back, {user_obj.name}!")
-        return user_obj
-    else:
-        print("Invalid credentials.")
-        return None
-
-def deliver_trash(user_obj):
-
-    print("Deliver Trash")
-    try:
-        amount = float(input("Enter the amount of trash delivered (kg): "))
-        trash_type = input("Enter the type of trash (plastic/metal/paper/glass/organic): ").lower()
-        if trash_type in user_obj.statistics.trash_by_type:
-            user_obj.statistics.trash_by_type[trash_type] += amount
-            user_obj.statistics.total_trash_amount += amount
-            points_earned = int(amount * 10)
-            user_obj.statistics.add_points(points_earned)
-            print(f"Trash delivered successfully! You earned {points_earned} points.")
-        else:
-            print("Invalid trash type.")
-    except ValueError:
-        print("Invalid amount entered.")
-
-def view_statistics(user_obj):
-
-    print(f"Statistics for {user_obj.name}:")
-    stats = user_obj.statistics
-    print(f"Total trash delivered: {stats.total_trash_amount} kg")
-    print(f"Points available: {stats.current_points}")
-    print(f"All-time points: {stats.all_time_points}")
-    print(f"Points traded: {stats.points_traded}")
-    print(f"Number of trades: {stats.number_of_trades}")
-
-def view_ranking_by_trash_amount():
-
-    print("User Ranking:")
-    # This section needs actual implementation of user ranking
-    u_list.display_rankings()
-
 def view_stores_and_coupons():
-
     print("Available Stores and Coupons:")
     for store in stores:
         print(f"\nStore: {store.name}\nBio: {store.bio}")
@@ -152,7 +151,6 @@ def view_stores_and_coupons():
             print(f"  {coupon_name}: {coupon.bio} - {coupon.price} points")
 
 def redeem_coupon(user_obj):
-
     store_name = input("Enter the store name to redeem a coupon: ")
     for store in stores:
         if store.name == store_name:
@@ -161,12 +159,13 @@ def redeem_coupon(user_obj):
                 print(f"{coupon_name} - {coupon.price} points")
             selected_coupon = input("Enter the name of the coupon to redeem: ")
             if store.redeem_coupon(selected_coupon, user_obj):
+                update_user_in_db(user_obj)  # Update user data in Firebase
                 print(f"Successfully redeemed {selected_coupon} coupon!")
             return
     print("Store not found.")
 
-def admin_actions():
 
+def admin_actions():
     print("Admin Actions")
     admin_email = input("Enter admin email: ")
     admin_password = input("Enter admin password: ")
@@ -190,39 +189,47 @@ def admin_actions():
         else:
             print("Invalid admin credentials.")
 
+
 def collection_location_actions():
     login_id = input("Enter the login ID: ")
     login_password = input("Enter the login password: ")
     collection_location_obj = fetch_collection_location_by_login_id(login_id)
     if collection_location_obj:
-        if collection_location_obj.login_id == login_id and collection_location_obj.login_password == login_password:
+        if collection_location_obj['login_id'] == login_id and collection_location_obj[
+            'login_password'] == login_password:
             while True:
                 action = input("1. Deliver Trash\n2. View Statistics\n3. Logout\nChoose an action: ")
                 if action == "1":
-                    collection_location_obj.deliver_trash()
+                    # Implement deliver_trash for collection location
+                    pass
                 elif action == "2":
-                    print(f"Statistics for {collection_location_obj.name}:")
-                    print(f"Total trash received: {collection_location_obj.statistics['total_trash_received']} kg")
+                    print(f"Statistics for {collection_location_obj['name']}:")
+                    print(f"Total trash received: {collection_location_obj['statistics']['total_trash_received']} kg")
                     print("Total trash received by type:")
-                    for trash_type, amount in collection_location_obj.statistics['total_trash_received_by_type'].items():
+                    for trash_type, amount in collection_location_obj['statistics'][
+                        'total_trash_received_by_type'].items():
                         print(f"{trash_type.capitalize()}: {amount} kg")
                 elif action == "3":
                     print("Logging out...")
+                    break
         else:
             print("Invalid credentials.")
     else:
         print("Collection location not found.")
-def main():
 
+
+def main():
     while True:
-        action = input("1. Sign Up\n2. Sign In\n3. Admin Login\n4. View Recycling Locations\n5.Collection Location Login\n6. Exit\nChoose an action: ")
+        action = input(
+            "1. Sign Up\n2. Sign In\n3. Admin Login\n4. View Recycling Locations\n5. Collection Location Login\n6. Exit\nChoose an action: ")
         if action == "1":
             sign_up()
         elif action == "2":
             user_obj = sign_in()
             if user_obj:
                 while True:
-                    user_action = input("1. Deliver Trash\n2. View Statistics\n3. View Ranking\n4. View Stores and Coupons\n5. Redeem Coupon\n6. Logout\nChoose an action: ")
+                    user_action = input(
+                        "1. Deliver Trash\n2. View Statistics\n3. View Ranking\n4. View Stores and Coupons\n5. Redeem Coupon\n6. Logout\nChoose an action: ")
                     if user_action == "1":
                         deliver_trash(user_obj)
                     elif user_action == "2":
@@ -245,6 +252,7 @@ def main():
         elif action == "6":
             print("Exiting...")
             break
+
 
 if __name__ == "__main__":
     main()
