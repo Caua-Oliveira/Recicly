@@ -11,6 +11,13 @@ class User:
         self.is_active = is_active
         self.statistics = statistics
 
+
+    def show_statistics(self):
+        print(f"Total de lixo entregue: {self.statistics.total_trash_amount} kg")
+        print(f"Pontos disponíveis: {self.statistics.current_points}")
+        print(f"Pontos acumulados: {self.statistics.all_time_points}")
+        print(f"Pontos trocados: {self.statistics.points_traded}")
+        print(f"Número de trocas: {self.statistics.number_of_trades}")
     @staticmethod
     def hash_password(password):
         # Generate a salt and hash the password

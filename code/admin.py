@@ -1,9 +1,8 @@
 import bcrypt
 
 class Admin:
-    def __init__(self, name, email, password):
-        self.name = name
-        self.email = email
+    def __init__(self, code, password):
+        self.code = code
         self.password = self.hash_password(password)
 
     @staticmethod
@@ -12,7 +11,8 @@ class Admin:
         return bcrypt.hashpw(password.encode(), salt)
 
     def verify_password(self, password):
-        return bcrypt.checkpw(password.encode(), self.password)
+        stored_password = self.password.encode('utf-8') if isinstance(self.password, str) else self.password
+        return bcrypt.checkpw(password.encode('utf-8'), stored_password)
 
     def add_store(self, store_list, store):
         store_list.append(store)

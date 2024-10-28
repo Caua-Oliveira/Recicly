@@ -16,8 +16,6 @@ def initialize_global_data():
     global stores
     stores = []
 
-    global admins
-    admins = [Admin("Admin", "admin@example.com", "admin_password")]
 
 initialize_global_data()
 
@@ -80,12 +78,7 @@ def deliver_trash(user_obj):
 
 def view_statistics(user_obj):
     print(f"Estatísticas de {user_obj.name}:")
-    stats = user_obj.statistics
-    print(f"Total de lixo entregue: {stats.total_trash_amount} kg")
-    print(f"Pontos disponíveis: {stats.current_points}")
-    print(f"Pontos acumulados: {stats.all_time_points}")
-    print(f"Pontos trocados: {stats.points_traded}")
-    print(f"Número de trocas: {stats.number_of_trades}")
+    user_obj.show_statistics()
 
 def view_ranking_by_trash_amount():
     print("Ranking de Usuários:")
@@ -128,49 +121,45 @@ def display_recycling_locations():
         print(f"Distância: {distance:.2f} km\n")
 
 def view_stores_and_coupons():
-    print("Lojas e Cupons Disponíveis:")
-    for store in stores:
-        print(f"\nLoja: {store.name}\nDescrição: {store.bio}")
-        for coupon_name, coupon in store.coupons.items():
-            print(f"  {coupon_name}: {coupon.bio} - {coupon.price} pontos")
+    try:
+        stores = fetch_all_stores_from_db()
+        for store in stores:
+            print(store)
+            for coupon in store.coupons.values():
+                print(coupon)
+            print("\n")
+    except Exception as e:
+        print(f"Erro ao obter lojas e cupons: {e}")
 
-def redeem_coupon(user_obj):
+def buy_coupon(user_obj):
+    stores = fetch_all_stores_from_db()
     store_name = input("Digite o nome da loja: ")
+
+    # Find the store by name
     for store in stores:
-        if store.name == store_name:
+        if store.name.strip() == store_name.strip():
             print(f"Cupons disponíveis em {store_name}:")
-            for coupon_name, coupon in store.coupons.items():
-                print(f"{coupon_name} - {coupon.price} pontos")
+
+            # Display available coupons
+            for coupon_code, coupon_data in store.coupons.items():
+                print(f"{coupon_data.name.strip()} - {coupon_data.price} pontos")
+
+            # Get the coupon name from the user
             selected_coupon = input("Digite o nome do cupom: ")
+
+            # Attempt to redeem the coupon
             if store.redeem_coupon(selected_coupon, user_obj):
-                update_user_in_db(user_obj)
+                update_user_in_db(user_obj)  # Update the user in the database
                 print(f"Cupom {selected_coupon} resgatado com sucesso!")
+            else:
+                print("Falha ao resgatar o cupom.")
             return
+
     print("Loja não encontrada.")
 
+
 def admin_actions():
-    print("Ações do Admin")
-    admin_email = input("Email do admin: ")
-    admin_password = input("Senha do admin: ")
-    for admin in admins:
-        if admin.email == admin_email and admin.verify_password(admin_password):
-            print(f"Bem-vindo, {admin.name}")
-            while True:
-                action = input("1. Adicionar Loja\n2. Remover Loja\n3. Sair\nEscolha uma ação: ")
-                if action == "1":
-                    store_name = input("Nome da Loja: ")
-                    store_bio = input("Descrição da Loja: ")
-                    stores.append(Store(store_name, store_bio))
-                    print(f"Loja {store_name} adicionada.")
-                elif action == "2":
-                    store_name = input("Nome da Loja para remover: ")
-                    admin.remove_store(stores, store_name)
-                    print(f"Loja {store_name} removida.")
-                elif action == "3":
-                    print("Saindo...")
-                    break
-        else:
-            print("Credenciais inválidas.")
+    print("Credenciais inválidas.")
 
 def main():
     while True:
@@ -193,7 +182,7 @@ def main():
                     elif user_action == "4":
                         view_stores_and_coupons()
                     elif user_action == "5":
-                        redeem_coupon(user_obj)
+                        buy_coupon(user_obj)
                     elif user_action == "6":
                         print("Saindo...")
                         break

@@ -6,4 +6,4 @@ class Coupon:
         self.code = code
 
     def __str__(self):
-        return f"Cupom: {self.name}, Bio: {self.bio}, Price: {self.price}, Code: {self.code}"
+        return f"Cupom: {self.name}, Descricao: {self.bio}, Preco: {int(self.price)}, Code: {self.code}"
