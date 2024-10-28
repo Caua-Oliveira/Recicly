@@ -1,11 +1,12 @@
 import firebase_admin
 from firebase_admin import credentials, db
 import user
+from user_statistics import *
 
 # Initialize Firebase app (you'll need to replace 'path/to/serviceAccountKey.json' with your actual path)
-cred = credentials.Certificate("code/reciclagem-d96e3-firebase-adminsdk-omcdz-0eeb40815c.json")
+cred = credentials.Certificate("reciclagem-d96e3-firebase-adminsdk-omcdz-0eeb40815c.json")
 firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://reciclagem-d96e3-default-rtdb.firebaseio.com'
+    'databaseURL': 'https://reciclagem-d96e3-default-rtdb.firebaseio.com/'
 })
 
 
@@ -43,12 +44,29 @@ def fetch_user_by_email(email):
         users = users_ref.get()
         for cpf, user_data in users.items():
             if user_data['email'] == email:
+                stats_data = user_data.get('statistics', {})
+
+                statistics = UserStatistics()
+                statistics.total_trash_amount = stats_data.get('total_trash_amount', 0)
+                statistics.trash_by_type = stats_data.get('trash_by_type', {
+                    'plastic': 0,
+                    'metal': 0,
+                    'paper': 0,
+                    'glass': 0,
+                    'organic': 0
+                })
+                statistics.all_time_points = stats_data.get('all_time_points', 0)
+                statistics.current_points = stats_data.get('current_points', 0)
+                statistics.points_traded = stats_data.get('points_traded', 0)
+                statistics.number_of_trades = stats_data.get('number_of_trades', 0)
+
                 return user.User(
                     name=user_data['name'],
                     email=user_data['email'],
                     password=user_data['password'].encode('utf-8'),
                     cpf=cpf,
-                    is_active=user_data['is_active']
+                    is_active=user_data['is_active'],
+                    statistics=statistics
                 )
         return None
     except Exception as e:
@@ -62,7 +80,8 @@ def update_user_in_db(user):
             'name': user.name,
             'email': user.email,
             'password': user.password.decode('utf-8'),
-            'is_active': user.is_active
+            'is_active': user.is_active,
+            'statistics': user.statistics.to_dict(),  # Add statistics here
         })
         return True
     except Exception as e:

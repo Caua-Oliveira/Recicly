@@ -4,6 +4,7 @@ class Store:
     def __init__(self, store_name, store_bio):
         self.name = store_name
         self.bio = store_bio
+        self.id = store_name+"id"
         self.coupons = {}  
         self.times_traded = 0
         self.points_traded = 0

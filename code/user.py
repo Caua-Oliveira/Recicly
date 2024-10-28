@@ -3,13 +3,13 @@ import bcrypt
 from database_connection import *
 
 class User:
-    def __init__(self, name, email, password, cpf, is_active=True):
+    def __init__(self, name, email, password, cpf, is_active=True, statistics=UserStatistics()):
         self.name = name
         self.email = email
         self.password = self.hash_password(password) if isinstance(password, str) else password
         self.cpf = cpf
         self.is_active = is_active
-        self.statistics = UserStatistics()
+        self.statistics = statistics
 
     @staticmethod
     def hash_password(password):
