@@ -157,7 +157,7 @@ def fetch_admin_by_code(code):
             if admin_data['code'] == code:
                 return admin.Admin(
                     code = admin_data['code'],
-                    password = admin_data['password'].encode('utf-8')
+                    password = admin_data['password']
                 )
         return None
     except Exception as e:
