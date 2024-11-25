@@ -19,8 +19,7 @@ def sign_up():
     name = input("Nome: ")
     email = input("Email: ")
     password = input("Senha: ")
-    cpf = input("CPF: ")
-    new_user = User(name, email, password, cpf)
+    new_user = User(name, email, password)
 
     if save_user_to_db(new_user):
         print("Usuário salvo com sucesso.")

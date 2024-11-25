@@ -15,21 +15,32 @@ firebase_admin.initialize_app(cred, {
 
 def save_user_to_db(user):
     try:
-        # Check if a user with the same CPF exists
-        user_ref = db.reference('users').child(user.cpf)
-        if user_ref.get() is not None:
-            print(f"Error: User with CPF {user.cpf} already exists.")
-            return False
+        # Reference to the counter node for unique IDs
+        counter_ref = db.reference('counter')
+
+        # Get the current counter value or initialize it if it doesn't exist
+        current_id = counter_ref.get()
+        if current_id is None:
+            current_id = 0
+
+        # Increment the counter
+        new_id = current_id + 1
+        counter_ref.set(new_id)  # Save the updated counter value
+
+        # Reference for the new user using the unique ID
+        user_ref = db.reference('users').child(str(new_id))
 
         # Check if the email is already used by another user
         users_ref = db.reference('users').get()
-        for key, user_data in users_ref.items():
-            if user_data.get('email') == user.email:
-                print(f"Error: Email {user.email} is already in use.")
-                return False
+        if users_ref:
+            for key, user_data in users_ref.items():
+                if user_data.get('email') == user.email:
+                    print(f"Error: Email {user.email} is already in use.")
+                    return False
 
-        # If the user does not exist, save the new user
+        # If the email is unique, save the new user
         user_ref.set({
+            'id': new_id,
             'name': user.name,
             'email': user.email,
             'password': user.password.decode('utf-8'),
@@ -39,14 +50,13 @@ def save_user_to_db(user):
     except Exception as e:
         print(f"Error saving user to database: {e}")
         return False
-
 def fetch_all_users_from_db():
     try:
         users_ref = db.reference('users')
         users_data = users_ref.get()
         users = []
 
-        for cpf, user_data in users_data.items():
+        for id, user_data in users_data.items():
             stats_data = user_data.get('statistics', {})
 
             statistics = UserStatistics()
@@ -67,7 +77,7 @@ def fetch_all_users_from_db():
                 name=user_data['name'],
                 email=user_data['email'],
                 password=user_data['password'].encode('utf-8'),
-                cpf=cpf,
+                id=id,
                 is_active=user_data['is_active'],
                 statistics=statistics
             )
@@ -80,9 +90,11 @@ def fetch_all_users_from_db():
 
 def fetch_user_by_email(email):
     try:
+
         users_ref = db.reference('users')
         users = users_ref.get()
-        for cpf, user_data in users.items():
+
+        for id, user_data in users.items():
             if user_data['email'] == email:
                 stats_data = user_data.get('statistics', {})
 
@@ -104,7 +116,7 @@ def fetch_user_by_email(email):
                     name=user_data['name'],
                     email=user_data['email'],
                     password=user_data['password'].encode('utf-8'),
-                    cpf=cpf,
+                    id=id,
                     is_active=user_data['is_active'],
                     statistics=statistics
                 )
@@ -113,9 +125,55 @@ def fetch_user_by_email(email):
         print(f"Error fetching user from database: {e}")
         return None
 
+
+def fetch_user_by_id(user_id):
+    try:
+        # Access the users database reference
+        users_ref = db.reference('users')
+
+        # Retrieve the specific user's data using the user_id
+        user_data = users_ref.child(user_id).get()
+
+        if user_data:
+            # Extract statistics if they exist
+            stats_data = user_data.get('statistics', {})
+
+            # Populate the UserStatistics object
+            statistics = UserStatistics()
+            statistics.total_trash_amount = stats_data.get('total_trash_amount', 0)
+            statistics.trash_by_type = stats_data.get('trash_by_type', {
+                'plastic': 0,
+                'metal': 0,
+                'paper': 0,
+                'glass': 0,
+                'organic': 0
+            })
+            statistics.all_time_points = stats_data.get('all_time_points', 0)
+            statistics.current_points = stats_data.get('current_points', 0)
+            statistics.points_traded = stats_data.get('points_traded', 0)
+            statistics.number_of_trades = stats_data.get('number_of_trades', 0)
+
+            # Return a User object with the fetched data
+            return user.User(
+                name=user_data['name'],
+                email=user_data['email'],
+                password=user_data['password'].encode('utf-8'),
+                id=user_id,
+                is_active=user_data['is_active'],
+                statistics=statistics
+            )
+
+        # If no user data is found for the given user_id
+        return None
+
+    except Exception as e:
+        print(f"Error fetching user by ID from database: {e}")
+        return None
+
+
 def update_user_in_db(user):
     try:
-        user_ref = db.reference(f'users/{user.cpf}')
+        user_ref = db.reference(f'users/{user.id}')
         user_ref.update({
             'name': user.name,
             'email': user.email,
@@ -126,15 +184,6 @@ def update_user_in_db(user):
         return True
     except Exception as e:
         print(f"Error updating user in database: {e}")
-        return False
-
-def delete_user_from_db(cpf):
-    try:
-        user_ref = db.reference(f'users/{cpf}')
-        user_ref.delete()
-        return True
-    except Exception as e:
-        print(f"Error deleting user from database: {e}")
         return False
 
 def fetch_collection_location_by_login_id(login_id):

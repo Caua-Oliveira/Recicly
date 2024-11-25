@@ -4,17 +4,13 @@ from database_connection import *
 import pandas as pd
 
 class User:
-    def __init__(self, name, email, password, cpf, is_active=True, statistics=UserStatistics()):
+    def __init__(self, name, email, password, id=None, is_active=True, statistics=UserStatistics()):
         self.name = name
         self.email = email
+        self.id = id
         self.password = self.hash_password(password) if isinstance(password, str) else password
-        self.cpf = cpf
         self.is_active = is_active
         self.statistics = statistics
-
-    import pandas as pd
-
-    import pandas as pd
 
     def show_statistics(self):
         # Trash statistics data
