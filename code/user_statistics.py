@@ -28,13 +28,3 @@ class UserStatistics:
             self.number_of_trades += 1
             return True
 
-    def to_dict(self):
-        """Convert statistics to a dictionary format suitable for Firebase."""
-        return {
-            'total_trash_amount': self.total_trash_amount,
-            'trash_by_type': self.trash_by_type,
-            'all_time_points': self.all_time_points,
-            'current_points': self.current_points,
-            'points_traded': self.points_traded,
-            'number_of_trades': self.number_of_trades,
-        }

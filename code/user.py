@@ -87,7 +87,23 @@ class User:
         self.password = self.hash_password(new_password)
         update_user_in_db(self)
 
-    def __str__(self):
-        return f"User: {self.name}, Email: {self.email}, CPF: {self.cpf}, Active: {bool(self.is_active)}"
+    def to_dict(self):
+        return {
+        'name': self.name.title(),
+        'email': self.email,
+        'points': self.statistics.current_points,
+        'total_trash_amount': self.statistics.total_trash_amount,
+        'trash_by_type': {
+            'plastic': self.statistics.trash_by_type.get('plastic', 0),
+            'metal': self.statistics.trash_by_type.get('metal', 0),
+            'paper': self.statistics.trash_by_type.get('paper', 0),
+            'glass': self.statistics.trash_by_type.get('glass', 0),
+            'organic': self.statistics.trash_by_type.get('organic', 0)
+        },
+        'all_time_points': self.statistics.all_time_points,
+        'current_points': self.statistics.current_points,
+        'points_traded': self.statistics.points_traded,
+        'number_of_trades': self.statistics.number_of_trades
+    }
 
 
