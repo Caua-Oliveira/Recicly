@@ -5,58 +5,63 @@
     box-sizing: border-box;
 }
 
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f3f3f3;
-    color: #333;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: #e8f5e9;
 }
 
 /* Estilos do Cabeçalho */
 header {
-    background: #28a745;
-    color: white;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
+  background: #28a745;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
 }
 
 header .logo {
-    font-size: 1.5em;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+header .logo a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1em;
     font-weight: bold;
 }
 
+header .logo a:hover {
+    color: #fdd835;
+}
 header nav ul {
-    display: flex;
-    list-style: none;
+  display: flex;
+  list-style: none;
 }
 
 header nav ul li {
-    margin: 0 10px;
+  margin: 0 10px;
 }
 
 header nav ul li a {
-    text-decoration: none;
-    color: white;
-    transition: color 0.3s;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: color 0.3s;
 }
 
 header nav ul li a:hover {
-    color: #fdd835;
+  color: #fdd835;
 }
-
-header .perfil-usuario img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
 /* Container Principal */
+
 .container {
     width: 100%;
     max-width: 500px;
-    background-color: #fff;
+    background: #e8f5e9;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden;
@@ -74,6 +79,7 @@ header .perfil-usuario img {
 /* Conteúdo Principal */
 .main-content {
     padding: 20px;
+
 }
 
 /* Formulário */
@@ -141,4 +147,19 @@ hr {
     margin: 20px 0;
     border: none;
     border-top: 1px solid #ddd;
+}
+
+.btn-register {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+  font-size: 1.1em;
+  text-decoration: none;
+}
+
+.btn-register:hover {
+  color: #fdd835;
 }
