@@ -1,0 +1,189 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f3f3f3; /* Fundo neutro */
+}
+
+/* Cabeçalho */
+header {
+  background: #28a745;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+header .logo {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+header .logo a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+header .logo a:hover {
+    color: #fdd835;
+}
+
+header nav ul {
+  display: flex;
+  list-style: none;
+}
+
+header nav ul li {
+  margin: 0 10px;
+}
+
+header nav ul li a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+header nav ul li a:hover {
+  color: #fdd835;
+}
+
+.btn-register {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+  font-size: 1.1em;
+  text-decoration: none;
+}
+
+.btn-register:hover {
+  color: #fdd835;
+}
+
+/* Seções */
+section {
+  padding: 20px;
+  text-align: center;
+}
+
+#inicio {
+  background: #e8f5e9;
+  padding: 50px 20px;
+}
+
+.texto-intro h1 {
+  font-size: 2em;
+  color: #28a745;
+}
+
+.texto-intro p {
+  font-size: 1.2em;
+  margin-top: 10px;
+  color: #555;
+}
+
+/* Tópicos */
+#topicos{
+  background: #e8f5e9;
+}
+.topicos ul {
+  list-style: none;
+  margin-top: 20px;
+}
+
+.topicos ul li {
+  margin: 10px 0;
+}
+
+.topicos ul li a {
+  text-decoration: none;
+  color: #28a745;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.topicos ul li a:hover {
+  color: #1b5e20;
+}
+
+/* Blocos de Tópicos */
+.topico {
+  background: #f1f8e9;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 800px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.topico h3 {
+  color: #28a745;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.topico p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 1em;
+}
+
+/* Carrossel */
+.carrossel {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 20px;
+  scroll-behavior: smooth;
+}
+
+.carrossel .slide {
+  flex: 0 0 80%;
+  background: #81c784;
+  padding: 40px;
+  border-radius: 10px;
+  color: white;
+  font-size: 1.2em;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carrossel .slide:hover {
+  background: #66bb6a;
+}
+
+/* Rodapé */
+footer {
+  background: #28a745;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 350px;
+  padding-right: 350px;
+
+
+}
+
+footer a {
+  color: #fdd835;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}

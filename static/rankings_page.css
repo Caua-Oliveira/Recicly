@@ -1,0 +1,50 @@
+/* Inherit styles from home_page.css */
+@import url('home_page.css');
+
+/* Placeholder and No Data Styles */
+.no-data,
+.no-rank {
+    text-align: center;
+    padding: 40px;
+}
+
+.placeholder-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+}
+
+.placeholder-message i {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: #28a745;
+}
+
+.placeholder-message p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.placeholder-message small {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Pseudo Icons (since we can't use actual icons) */
+.icon-no-data::before {
+    content: "📊";
+}
+
+.icon-no-rank::before {
+    content: "🏆";
+}
+
+/* Additional Styles for Empty States */
+.ranking-table .no-data td {
+    background-color: #f9f9f9;
+    color: #888;
+}
+
+/* Existing rankings styles remain the same */
