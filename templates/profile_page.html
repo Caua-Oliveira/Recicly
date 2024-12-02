@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recicly - Perfil do Usuário</title>
+  <link rel="stylesheet" href="static/profile_page.css">
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+    <nav>
+      <ul>
+        <li><a href="#locais">Locais Próximos</a></li>
+        <li><a href="#loja">Loja</a></li>
+        <li><a href="#rankings">Rankings</a></li>
+        <li><a href="#estatisticas">Estatísticas</a></li>
+      </ul>
+    </nav>
+    <div class="registro">
+      <a href="{{ url_for('profile') }}" class="btn-register">Perfil</a>
+    </div>
+  </header>
+
+  <main class="perfil-container">
+    <section class="perfil-informacoes">
+      <h2>Informações do Usuário</h2>
+      <p><strong>Nome:</strong> {{ name }}</p>
+      <p><strong>Email:</strong> {{ email }}</p>
+      <p><strong>Pontos:</strong>
+        <span class="points-container">
+          <img src="{{ url_for('static', filename='images/coin.png') }}" alt="Coin" class="coin-icon">
+          {{ points }}
+        </span>
+      </p>
+    </section>
+
+    <section class="perfil-acoes">
+      <button id="btn-estatisticas">Ver Estatísticas</button>
+
+      <!-- Statistics Container -->
+        <section id="estatisticas-container">
+    <h3>Suas Estatísticas</h3>
+    <div class="stats-grid">
+        <!-- Left Column -->
+        <div class="left-column">
+            <div class="stat-item">
+                <strong>Total de Lixo Reciclado (kg)</strong>
+                <p id="total-trash-amount">{{ total_trash_amount }}</p>
+            </div>
+            <div class="stat-item trash-by-type">
+                <strong>Lixo por Tipo (kg)</strong>
+                <p>Plástico: {{ trash_by_type.plastic }}</p>
+                <p>Metal: {{ trash_by_type.metal }}</p>
+                <p>Papel: {{ trash_by_type.paper }}</p>
+                <p>Vidro: {{ trash_by_type.glass }}</p>
+                <p>Orgânico: {{ trash_by_type.organic }}</p>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <div class="stat-item">
+                <strong>Total de Pontos</strong>
+                <p id="total-points">{{ all_time_points }}</p>
+            </div>
+            <div class="stat-item">
+                <strong>Pontos Atuais</strong>
+                <p id="current-points">{{ current_points }}</p>
+            </div>
+            <div class="stat-item">
+                <strong>Pontos Trocados</strong>
+                <p id="points-traded">{{ points_traded }}</p>
+            </div>
+            <div class="stat-item">
+                <strong>Número de Trocas</strong>
+                <p id="number-of-trades">{{ number_of_trades }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+      <button id="btn-trocar-senha"><a href="{{ url_for('sair') }}">Sair</a></button>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnEstatisticas = document.getElementById('btn-estatisticas');
+      const estatisticasContainer = document.getElementById('estatisticas-container');
+
+      btnEstatisticas.addEventListener('click', () => {
+        estatisticasContainer.classList.toggle('visible');
+
+        // Toggle button text
+        if (estatisticasContainer.classList.contains('visible')) {
+          btnEstatisticas.textContent = 'Ocultar Estatísticas';
+        } else {
+          btnEstatisticas.textContent = 'Ver Estatísticas';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

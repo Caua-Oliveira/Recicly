@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recicly</title>
+  <link rel="stylesheet" href="static/home_page.css">
+</head>
+<body>
+  <!-- Cabeçalho -->
+  <header>
+    <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+    <nav>
+      <ul>
+        <li><a href="#locais">Locais Próximos</a></li>
+        <li><a href="#loja">Loja</a></li>
+        <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
+        <li><a href="#estatisticas">Estatísticas</a></li>
+      </ul>
+    </nav>
+    <div class="registro">
+      <a href="{{ url_for('profile') }}" class="btn-register">Perfil</a>
+    </div>
+  </header>
+
+  <!-- Parte Inicial -->
+  <section id="inicio">
+    <div class="texto-intro">
+      <h1>Bem-vindo ao Recicly</h1>
+      <p>Transformando o futuro com sustentabilidade.</p>
+    </div>
+    <div class="topicos">
+      <h2>Tópicos - Clique para explorar</h2>
+      <ul>
+        <li><a href="#topico1">1. O que é o Recicly?</a></li>
+        <li><a href="#topico2">2. O que fazemos?</a></li>
+        <li><a href="#topico3">3. Como funciona?</a></li>
+        <li><a href="#topico4">4. Ranking</a></li>
+        <li><a href="#topico5">5. Estatísticas</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Corpo do Site -->
+  <section id="topicos">
+    <div class="topico" id="topico1">
+      <h3>O que é o Recicly?</h3>
+      <p>Recicly é uma plataforma inovadora que incentiva a reciclagem por meio de um sistema de recompensas. Nosso objetivo é motivar as pessoas a adotarem práticas sustentáveis, contribuindo para um planeta mais limpo e saudável. Cada material reciclado transforma-se em pontos que podem ser trocados por cupons de desconto em lojas parceiras.</p>
+    </div>
+    <div class="topico" id="topico2">
+      <h3>O que fazemos?</h3>
+      <p>No Recicly, promovemos a coleta seletiva e conectamos indivíduos a locais de coleta próximos. Incentivamos o reaproveitamento de materiais e a redução de resíduos através de:</p>
+      <ul>
+        <li>Registro de materiais recicláveis entregues.</li>
+        <li>Cálculo de pontos com base no tipo e quantidade de materiais reciclados.</li>
+        <li>Parcerias com lojas que oferecem benefícios exclusivos para os participantes.</li>
+      </ul>
+    </div>
+    <div class="topico" id="topico3">
+      <h3>Como funciona?</h3>
+      <p>
+        <strong>1. Entregue materiais recicláveis:</strong> Leve seus resíduos até um dos nossos pontos de coleta parceiros.<br>
+        <strong>2. Ganhe pontos:</strong> Nossos agentes registram a entrega, e seus pontos são calculados conforme o tipo de material.<br>
+        <strong>3. Troque por benefícios:</strong> Acesse nossa plataforma, escolha um cupom de sua loja favorita e resgate seus pontos.
+      </p>
+    </div>
+    <div class="topico" id="topico4">
+      <h3>Ranking</h3>
+      <p>Compita com outros participantes e veja quem está liderando nos esforços de reciclagem. O ranking é atualizado regularmente e reflete a quantidade de materiais reciclados e pontos acumulados. Seja um destaque na comunidade Recicly!</p>
+    </div>
+    <div class="topico" id="topico5">
+      <h3>Estatísticas</h3>
+      <p>Acompanhe seus progressos e métricas pessoais, como:</p>
+      <ul>
+        <li>Quantidade total de materiais reciclados.</li>
+        <li>Tipos de resíduos entregues.</li>
+        <li>Pontuação acumulada ao longo do tempo.</li>
+      </ul>
+      <p>Essas estatísticas também ajudam a entender seu impacto no meio ambiente.</p>
+    </div>
+  </section>
+
+  <!-- Rodapé -->
+  <footer id="contato">
+    <p>Interessado? <a href="mailto:contato@recicly.com">Entre em contato</a></p>
+    <p>Redes sociais: <a href="#">Acesse aqui</a></p>
+    <p>Dúvidas? <a href="#">Suporte</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

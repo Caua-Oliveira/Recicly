@@ -8,20 +8,18 @@
 </head>
 <body>
     <!-- Cabeçalho -->
-    <header>
-        <div class="logo">RECICLY</div>
-        <nav>
-            <ul>
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#topicos">Tópicos</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
-        <div class="perfil-usuario">
-            <img src="user-placeholder.png" alt="Foto do Usuário">
-        </div>
-    </header>
+  <header>
+    <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+    <nav>
+      <ul>
+        <li><a href="#rankings">Rankings</a></li>
+        <li><a href="#estatisticas">Estatísticas</a></li>
+      </ul>
+    </nav>
+    <div class="registro">
+      <a href="{{ url_for('register') }}" class="btn-register">Registrar-se</a>
+    </div>
+  </header>
 
     <!-- Conteúdo Principal -->
     <div class="container">
