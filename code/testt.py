@@ -50,3 +50,6 @@ def add_coupon_to_store(store_id):
     # Add coupon to Firebase
     ref.set(coupon_data)
     print(f"Coupon '{coupon.name}' added successfully to store with ID '{store_id}'!")
+
+add_coupon_to_store('Papelaria Santanaid')
+

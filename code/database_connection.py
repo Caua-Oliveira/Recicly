@@ -133,7 +133,8 @@ def fetch_user_by_id(user_id):
 
         # Retrieve the specific user's data using the user_id
         user_data = users_ref.child(user_id).get()
-
+        print(user_data)
+        print(type(user_data))
         if user_data:
             # Extract statistics if they exist
             stats_data = user_data.get('statistics', {})
@@ -253,5 +254,70 @@ def fetch_all_stores_from_db():
     except Exception as e:
         print(f"Error fetching stores from database: {e}")
         return []
+
+def fetch_site_statistics():
+    try:
+        # Reference to the users in the database
+        users_ref = db.reference('users')
+        users_data = users_ref.get()
+
+        # Initialize site-wide statistics
+        total_trash_amount = 0
+        trash_by_type = {
+            'plastic': 0,
+            'metal': 0,
+            'paper': 0,
+            'glass': 0,
+            'organic': 0
+        }
+        all_time_points = 0
+        current_points = 0
+        points_traded = 0
+        number_of_trades = 0
+
+        # Iterate through each user's data to accumulate statistics
+        for id, user_data in users_data.items():
+            stats_data = user_data.get('statistics', {})
+
+            # Accumulate total trash and trash by type
+            total_trash_amount += stats_data.get('total_trash_amount', 0)
+            for trash_type, amount in stats_data.get('trash_by_type', {}).items():
+                if trash_type in trash_by_type:
+                    trash_by_type[trash_type] += amount
+
+            # Accumulate points and trade statistics
+            all_time_points += stats_data.get('all_time_points', 0)
+            current_points += stats_data.get('current_points', 0)
+            points_traded += stats_data.get('points_traded', 0)
+            number_of_trades += stats_data.get('number_of_trades', 0)
+
+        # Prepare the final statistics dictionary
+        site_statistics = {
+            'total_trash_amount': total_trash_amount,
+            'trash_by_type': trash_by_type,
+            'all_time_points': all_time_points,
+            'current_points': current_points,
+            'points_traded': points_traded,
+            'number_of_trades': number_of_trades
+        }
+
+        return site_statistics
+    except Exception as e:
+        print(f"Error fetching site statistics: {e}")
+        return {
+            'total_trash_amount': 0,
+            'trash_by_type': {
+                'plastic': 0,
+                'metal': 0,
+                'paper': 0,
+                'glass': 0,
+                'organic': 0
+            },
+            'all_time_points': 0,
+            'current_points': 0,
+            'points_traded': 0,
+            'number_of_trades': 0
+        }
+
 
 

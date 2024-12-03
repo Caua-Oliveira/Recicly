@@ -53,14 +53,29 @@ def view_statistics(user_obj):
     user_obj.show_statistics()
 
 
-def view_ranking():
+def view_ranking(uid):
     try:
         users = fetch_all_users_from_db()
         sorted_users = sorted(users, key=lambda user: user.statistics.total_trash_amount, reverse=True)
-
-        print("Ranking de Usuários por Lixo Entregue:")
+        ranking_data = []
+        user_rank = {'trash_amount': 0, 'position': 'N/A', 'name': 'N/A'}
         for rank, user in enumerate(sorted_users, start=1):
-            print(f"{rank}. {user.name} - {user.statistics.total_trash_amount} kg")
+            if user.id == uid:
+                user_rank = {
+                    'name': user.name.title(),
+                    'trash_amount': user.statistics.total_trash_amount,
+                    'position': rank
+                }
+            user_data = {
+                'rank': rank,
+                'name': user.name.title(),
+                'trash_amount': user.statistics.total_trash_amount,
+                'id': user.id
+            }
+            ranking_data.append(user_data)
+
+
+        return ranking_data, user_rank
     except Exception as e:
         print(f"Erro ao obter ranking: {e}")
 
@@ -99,6 +114,22 @@ def buy_coupon(user_obj):
                 print("Falha ao resgatar o cupom.")
             return
 
+def buy_coupon2(store_name, selected_coupon, uid):
+    stores = fetch_all_stores_from_db()
+    user_obj = fetch_user_by_id(uid)
+
+    # Find the store by name
+    for store in stores:
+        if store.name.strip() == store_name.strip():
+
+            if store.redeem_coupon(selected_coupon, user_obj):
+                update_user_in_db(user_obj)  # Update the user in the database
+                print(f"Cupom {selected_coupon} resgatado com sucesso!")
+                return True
+            else:
+                print("Falha ao resgatar o cupom.")
+            return False
+
 def fetch_recycling_locations():
     url = "https://geo.salvador.ba.gov.br/arcgis/rest/services/Hosted/cooperativas_p/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"
     try:
@@ -123,17 +154,19 @@ def display_recycling_locations():
 
     locations_with_distances.sort(key=lambda x: x[0])
 
-    print("\nLocais de Reciclagem na Cidade:\n")
-    for distance, properties, coordinates in locations_with_distances:
-        name = properties.get('nome', 'N/A')
-        address = properties.get('endereço', 'N/A')
-        contact = properties.get('contato', 'N/A')
+    return locations_with_distances
 
-        print(f"Nome: {name}")
-        print(f"Endereço: {address}")
-        print(f"Contato: {contact}")
-        print(f"Coordenadas: {coordinates}")
-        print(f"Distância: {distance:.2f} km\n")
+    # print("\nLocais de Reciclagem na Cidade:\n")
+    # for distance, properties, coordinates in locations_with_distances:
+    #     name = properties.get('nome', 'N/A')
+    #     address = properties.get('endereço', 'N/A')
+    #     contact = properties.get('contato', 'N/A')
+    #
+    #     print(f"Nome: {name}")
+    #     print(f"Endereço: {address}")
+    #     print(f"Contato: {contact}")
+    #     print(f"Coordenadas: {coordinates}")
+    #     print(f"Distância: {distance:.2f} km\n")
 
 def deliver_trash(user_obj):
     print("Entrega de Lixo")

@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from user import User
 from database_connection import *
-import os
+from main import view_ranking, fetch_site_statistics, display_recycling_locations, fetch_all_stores_from_db, buy_coupon2
+
 
 # Flask app with custom templates and static paths
 app = Flask(
@@ -9,21 +10,19 @@ app = Flask(
     template_folder="../templates",  # Adjust path for templates
     static_folder="../static"        # Adjust path for static files
 )
-app.secret_key = "your_secret_key"
+app.secret_key = "secret_key"
 
 # Routes for main navigation
 @app.route('/')
 def start():
-    return render_template('home_page.html')
+    return redirect(url_for('home_page'))
 
 @app.route('/home')
 def home_page():
-    print(session.get('user_id'))
-    if session.get('user_id') == '2':
-        session['user_id'] = 'none'
-    if session.get('user_id') == 'none':
-        return render_template('home_page.html')
-    return redirect(url_for('logged_home_page'))
+    logged = False
+    if session.get('user_id') is not None:
+        logged = True
+    return render_template('home_page.html', logged=logged)
 
 @app.route('/home', methods=['POST'])
 def home():
@@ -31,7 +30,7 @@ def home():
 
 @app.route('/sair')
 def sair():
-    session['user_id'] = 'none'
+    session.pop('user_id', None)
     return redirect(url_for('home_page'))
 
 @app.route('/register')
@@ -66,81 +65,55 @@ def login():
     user = fetch_user_by_email(email)
     if user and user.verify_password(password):
         session['user_id'] = user.id  # Save user in session
-        return redirect(url_for('logged_home_page', uid=user.id))
+        return redirect(url_for('home_page', uid=user.id))
     else:
         flash("E-mail ou senha incorretos.", "error")
         return redirect(url_for('login_page'))
 
-@app.route('/logged')
-def logged_home_page():
-    return render_template('logged_home_page.html')
-
-@app.route('/logged', methods=['POST'])
-def logged():
-    return
-
 @app.route('/rankings')
 def rankings_page():
-    ranking_data = [
-        {
-            'name': 'João Silva',
-            'trash_amount': 45.5,  # in kilograms
-            'points': 1250,
-            'user_id': 1
-        },
-        {
-            'name': 'Maria Santos',
-            'trash_amount': 38.2,
-            'points': 1100,
-            'user_id': 2
-        },
-        {
-            'name': 'Pedro Oliveira',
-            'trash_amount': 52.7,
-            'points': 1450,
-            'user_id': 3
-        },
-        {
-            'name': 'Ana Souza',
-            'trash_amount': 29.6,
-            'points': 850,
-            'user_id': 4
-        },
-        {
-            'name': 'Carlos Eduardo',
-            'trash_amount': 61.3,
-            'points': 1700,
-            'user_id': 5
-        }
-    ]
+    logged = False
+    if session.get('user_id') is not None:
+        logged = True
+        user_obj = fetch_user_by_id(session['user_id'])
+        ranking_data, user_rank = view_ranking(user_obj.id)
+    else:
+        ranking_data, user_rank = view_ranking('0')
 
-    # Example of user_rank structure
-    user_rank = {
-        'name': 'Current User',
-        'trash_amount': 35.8,
-        'points': 1000,
-        'position': 6,  # User's current ranking
-        'user_id': 41
-    }
-    user_rank = {
-        'name': 'Caua Oliveira',  # Assuming you have a username attribute
-        'trash_amount': 35.8,
-        'points': 1000,
-        'position': 6,  # This would be calculated based on actual ranking
-        'user_id': 41
-    }
     return render_template('rankings_page.html',
-                           ranking_data=ranking_data,
-                           user_rank=user_rank)
+                            ranking_data=ranking_data,
+                            user_rank=user_rank,
+                            logged=logged)
+
 
 @app.route('/rankings', methods=['POST'])
 def rankings():
     return
+
+@app.route('/places')
+def places_page():
+    display_recycling_locations()
+    return render_template('places_page.html', locations_with_distances=display_recycling_locations())
+
+@app.route('/places', methods=['POST'])
+def places():
+    return
+
+@app.route('/stores')
+def stores_page():
+    logged = True
+    stores = fetch_all_stores_from_db()
+    return render_template('stores_page.html', stores=stores, logged=logged)
+
+@app.route('/stores', methods=['POST'])
+def stores():
+    return
+
 @app.route('/profile')
 def profile_page():
     user_obj = fetch_user_by_id(session.get('user_id'))
-    user_stats = user_obj.to_dict()
     if user_obj:
+        user_stats = user_obj.to_dict()
         return render_template('profile_page.html', **user_stats)
     else:
         flash("Usuário não encontrado.", "error")
@@ -150,13 +123,24 @@ def profile_page():
 def profile():
     return
 
-@app.route('/dashboard/<uid>')
-def dashboard(uid):
-    user = fetch_user_by_id(uid)
-    if user:
-        return f"<h1>Bem-vindo, {user.name}!</h1>"
+@app.route('/sitestats')
+def sitestats_page():
+    logged = True
+    stats = fetch_site_statistics()
+    return render_template('sitestats_page.html', statistics=stats, logged=logged)
+@app.route('/sitestats', methods=['POST'])
+def sitestats():
+    return
+
+@app.route('/buy_coupon')
+def buyCoupon(store_name, selected_coupon):
+    b = buy_coupon2(store_name, selected_coupon, session.get('user_id'))
+    if b:
+        flash("Cupom resgatado com sucesso!", "success")
     else:
-        return "Usuário não encontrado.", 404
+        flash("Falha ao resgatar o cupom.", "error")
+    return
+
 
 if __name__ == "__main__":
     app.run(debug=True)
