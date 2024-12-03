@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Recicly - Lojas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stores_page.css') }}">
+</head>
+<body>
+    <header>
+    <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+    <nav>
+      <ul>
+        {% if logged %}
+            <li><a href="{{ url_for('places') }}">Locais Próximos</a></li>
+            <li><a href="{{ url_for('stores') }}">Loja</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
+        <li><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
+      </ul>
+    </nav>
+    <div class="registro">
+      {% if logged %}
+            <a href="{{ url_for('profile') }}" class="btn-register">Perfil</a>
+        {% else %}
+            <a href="{{ url_for('register') }}" class="btn-register">Registrar-se</a>
+        {% endif %}
+    </div>
+  </header>
+
+    <main>
+        <h2>Menu de Lojas</h2>
+
+        <section class="lojas" id="stores-container">
+            {% for store in stores %}
+            <div class="loja" data-store-id="{{ store.id }}">
+                <div class="info-loja">
+                    <div>
+                        <h3>{{ store.name }}</h3>
+                        <p>{{ store.bio }}</p>
+                        <p>Nº de cupons: {{ store.coupons|length }}</p>
+                    </div>
+                    <button class="selecionar" onclick="toggleCoupons(this)">Selecionar</button>
+                </div>
+
+                <div class="info-cupom" style="display:none;">
+                    {% for coupon_name, coupon in store.coupons.items() %}
+                    <div class="cupom">
+                        <h4>{{ coupon.name }}</h4>
+                        <p>{{ coupon.bio }}</p>
+                        <h4>Preço:
+                        <span class="points-container">
+                          <img src="{{ url_for('static', filename='images/coin.png') }}" alt="Coin" class="coin-icon">{{ coupon.price|int }}
+                        </span>
+                        </h4>
+
+                        <button
+                            class="comprar"
+                            onclick="buyCoupon('{{ store.name }}', '{{ coupon.name }}')"
+                        >
+                            Comprar
+                        </button>
+                        <p class="linha">_________________________________________________________ </p>
+
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+
+        <footer>
+            <p>Interessado? <a href="mailto:contato@recicly.com">Entre em contato</a></p>
+            <p>Redes sociais: <a href="#">Acesse aqui</a></p>
+            <p>Dúvidas? <a href="#">Suporte</a></p>
+        </footer>
+    </main>
+
+    <script>
+    function toggleCoupons(button) {
+        const storeElement = button.closest('.loja');
+        const couponsSection = storeElement.querySelector('.info-cupom');
+
+        if (couponsSection.style.display === 'none' || couponsSection.style.display === '') {
+            couponsSection.style.display = 'block';
+            button.textContent = 'Ocultar';
+        } else {
+            couponsSection.style.display = 'none';
+            button.textContent = 'Selecionar';
+        }
+    }
+    function buyCoupon(storeName, couponName) {
+    fetch(`/buy_coupon?store_name=${encodeURIComponent(storeName)}&selected_coupon=${encodeURIComponent(couponName)}`)
+        .then(response => {
+            // Reload the page to show flash messages
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+    </script>
+
+</body>
+</html>

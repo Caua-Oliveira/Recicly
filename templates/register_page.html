@@ -10,17 +10,15 @@
     <!-- Cabeçalho -->
     <header>
         <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
-        <nav>
-            <ul>
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#topicos">Tópicos</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
-        <div class="registro">
-            <a href="{{ url_for('login') }}" class="btn-register">Entrar</a>
-        </div>
+            <nav>
+              <ul>
+                <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
+                <li class = "est"><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
+              </ul>
+            </nav>
+            <div class="registro">
+              <a href="{{ url_for('login') }}" class="btn-register">Entrar</a>
+            </div>
     </header>
 
     <div class="container">

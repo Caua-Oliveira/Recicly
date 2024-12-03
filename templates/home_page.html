@@ -12,12 +12,20 @@
     <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
     <nav>
       <ul>
-        <li><a href="#rankings">Rankings</a></li>
-        <li><a href="#estatisticas">Estatísticas</a></li>
+        {% if logged %}
+            <li><a href="{{ url_for('places') }}">Locais Próximos</a></li>
+            <li><a href="{{ url_for('stores') }}">Loja</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
+        <li><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
       </ul>
     </nav>
     <div class="registro">
-      <a href="{{ url_for('register') }}" class="btn-register">Registrar-se</a>
+      {% if logged %}
+            <a href="{{ url_for('profile') }}" class="btn-register">Perfil</a>
+        {% else %}
+            <a href="{{ url_for('register') }}" class="btn-register">Registrar-se</a>
+        {% endif %}
     </div>
   </header>
 

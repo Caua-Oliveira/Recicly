@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locais Próximos</title>
+    <link rel="stylesheet" href="static/places_page.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+        <nav>
+          <ul>
+            <li><a href="{{ url_for('places') }}">Locais Próximos</a></li>
+            <li><a href="{{ url_for('stores') }}">Loja</a></li>
+            <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
+            <li><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
+          </ul>
+        </nav>
+        <div class="registro">
+          <a href="{{ url_for('profile') }}" class="btn-register">Perfil</a>
+        </div>
+    </header>
+    <main>
+        <h2>Locais Próximos</h2>
+        <section class="locais">
+            {% for location in locations_with_distances %}
+            <div class="local">
+                <h3>{{ location[1]['nome'] }}</h3>
+                <p><strong>Endereço:</strong> {{ location[1]['endereço'] }}</p>
+                <p><strong>Contato:</strong> {{ location[1]['contato'] }}</p>
+                <p><strong>Distância:</strong> {{ location[0] | round(2) }} km</p>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+    <footer id="contato">
+        <p>Interessado? <a href="mailto:contato@recicly.com">Entre em contato</a></p>
+        <p>Redes sociais: <a href="#">Acesse aqui</a></p>
+        <p>Dúvidas? <a href="#">Suporte</a></p>
+    </footer>
+</body>
+</html>

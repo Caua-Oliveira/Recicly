@@ -11,10 +11,10 @@
     <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
     <nav>
       <ul>
-        <li><a href="#locais">Locais Próximos</a></li>
-        <li><a href="#loja">Loja</a></li>
-        <li><a href="#rankings">Rankings</a></li>
-        <li><a href="#estatisticas">Estatísticas</a></li>
+        <li><a href="{{ url_for('places') }}">Locais Próximos</a></li>
+        <li><a href="{{ url_for('stores') }}">Loja</a></li>
+        <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
+        <li><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
       </ul>
     </nav>
     <div class="registro">
@@ -61,12 +61,12 @@
         <!-- Right Column -->
         <div class="right-column">
             <div class="stat-item">
-                <strong>Total de Pontos</strong>
-                <p id="total-points">{{ all_time_points }}</p>
+                <strong>Pontos Atuais</strong>
+                <p id="current points">{{ current_points }}</p>
             </div>
             <div class="stat-item">
-                <strong>Pontos Atuais</strong>
-                <p id="current-points">{{ current_points }}</p>
+                <strong>Pontos Recebidos</strong>
+                <p id="total-points">{{ all_time_points }}</p>
             </div>
             <div class="stat-item">
                 <strong>Pontos Trocados</strong>

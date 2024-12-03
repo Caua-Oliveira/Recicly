@@ -7,56 +7,71 @@
     <link rel="stylesheet" href="static/rankings_page.css">
 </head>
 <body>
-    <!-- Header (similar to home page) -->
-    <header>
-        <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+        <header>
+        <div class="logo">
+            <a href="{{ url_for('home') }}">RECICLY</a>
+        </div>
         <nav>
             <ul>
-                <li><a href="{{ url_for('home') }}">Início</a></li>
+                {% if logged %}
+                    <li><a href="{{ url_for('places') }}">Locais Próximos</a></li>
+                    <li><a href="{{ url_for('stores') }}">Loja</a></li>
+                {% endif %}
                 <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
+                <li><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
             </ul>
         </nav>
+        <div class="registro">
+            {% if logged %}
+                <a href="{{ url_for('profile') }}" class="btn-register">Perfil</a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn-register">Registrar-se</a>
+            {% endif %}
+        </div>
     </header>
 
-    <!-- Rankings Section -->
     <section id="rankings">
-        <h1>Ranking de Reciclagem</h1>
-
-        <div class="ranking-container">
-            <table class="ranking-table">
-                <thead>
-                    <tr>
-                        <th>Posição</th>
-                        <th>Nome</th>
-                        <th>Quantidade de Resíduos (kg)</th>
-                        <th>Pontos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in ranking_data %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.trash_amount }} kg</td>
-                        <td>{{ user.points }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="texto-intro">
+            <h1>Ranking de Reciclagem</h1>
+            <p>Veja quem está fazendo a diferença na sustentabilidade!</p>
         </div>
 
-        <!-- Personal Ranking Section -->
-        <div class="personal-ranking">
-            <h2>Sua Posição</h2>
-            <div class="personal-card">
-                <p>Posição Atual: {{ user_rank.position }}</p>
-                <p>Total de Resíduos: {{ user_rank.trash_amount }} kg</p>
-                <p>Pontos Acumulados: {{ user_rank.points }}</p>
+        <div class="topico">
+            <h3>Ranking Geral</h3>
+            <div class="ranking-container">
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>Posição</th>
+                            <th>Nome</th>
+                            <th>Quantidade Entregue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in ranking_data %}
+                        <tr>
+                            <td>{{ user.rank }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.trash_amount }} kg</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="topico">
+            <h3>Seu Ranking</h3>
+            <img src="{{ url_for('static', filename='images/trophy.png') }}" alt="Trophy" class="trophy-icon">
+            <div class="personal-ranking">
+                <div class="personal-card">
+                    <p>Posição Atual: {{ user_rank.position }}</p>
+                    <p>Total de Resíduos: {{ user_rank.trash_amount }} kg</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer (similar to home page) -->
     <footer>
         <p>Interessado? <a href="mailto:contato@recicly.com">Entre em contato</a></p>
         <p>Redes sociais: <a href="#">Acesse aqui</a></p>

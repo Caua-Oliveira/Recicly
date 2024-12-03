@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Recicly - Estatísticas do Site</title>
+    <link rel="stylesheet" href="static/sitestats_page.css">
+</head>
+<body>
+   <header>
+        <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+        <nav>
+          <ul>
+            {% if logged %}
+                <li><a href="{{ url_for('places') }}">Locais Próximos</a></li>
+                <li><a href="{{ url_for('stores') }}">Loja</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
+            <li><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
+          </ul>
+        </nav>
+        <div class="registro">
+          {% if logged %}
+                <a href="{{ url_for('profile') }}" class="btn-register">Perfil</a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn-register">Registrar-se</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main>
+        <h2>Estatísticas do Recicly</h2>
+
+        <section class="statistics-container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total de Lixo Reciclado</h3>
+                    <p class="stat-value">{{ statistics.total_trash_amount|round(2) }} kg</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Total de Pontos Distribuídos</h3>
+                    <p class="stat-value">{{ statistics.all_time_points|int }}</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Total de Pontos Trocados</h3>
+                    <p class="stat-value">{{ statistics.points_traded|int }}</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Número de Trocas Feitas</h3>
+                    <p class="stat-value">{{ statistics.number_of_trades|int }}</p>
+                </div>
+
+                <div class="stat-card trash-type">
+                    <h3>Total de Lixo Reciclado por Tipo</h3>
+                    <div class="trash-breakdown">
+                        <div class="trash-item">
+                            <span>Plástico:</span>
+                            <span>{{ statistics.trash_by_type.plastic|round(2) }} kg</span>
+                        </div>
+                        <div class="trash-item">
+                            <span>Metal:</span>
+                            <span>{{ statistics.trash_by_type.metal|round(2) }} kg</span>
+                        </div>
+                        <div class="trash-item">
+                            <span>Papel:</span>
+                            <span>{{ statistics.trash_by_type.paper|round(2) }} kg</span>
+                        </div>
+                        <div class="trash-item">
+                            <span>Vidro:</span>
+                            <span>{{ statistics.trash_by_type.glass|round(2) }} kg</span>
+                        </div>
+                        <div class="trash-item">
+                            <span>Orgânico:</span>
+                            <span>{{ statistics.trash_by_type.organic|round(2) }} kg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+  <!-- Rodapé -->
+  <footer id="contato">
+    <p>Interessado? <a href="mailto:contato@recicly.com">Entre em contato</a></p>
+    <p>Redes sociais: <a href="#">Acesse aqui</a></p>
+    <p>Dúvidas? <a href="#">Suporte</a></p>
+  </footer>
+
+</body>
+</html>
