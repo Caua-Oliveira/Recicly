@@ -1,4 +1,5 @@
 /* Reset básico */
+@import url('home_page.css');
 * {
     margin: 0;
     padding: 0;
@@ -12,80 +13,43 @@ body {
   background: #e8f5e9;
 }
 
-/* Estilos do Cabeçalho */
-header {
-  background: #28a745;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-}
-
-header .logo {
-  font-size: 1.5em;
-  font-weight: bold;
-}
-header .logo a {
-    text-decoration: none;
-    color: white;
-    font-size: 1.1em;
-    font-weight: bold;
-}
-
-header .logo a:hover {
-    color: #fdd835;
-}
-
-header nav ul {
-  display: flex;
-  list-style: none;
-}
-
-header nav ul li {
-  margin: 0 10px;
-}
-
-header nav ul li a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-header nav ul li a:hover {
-  color: #fdd835;
-}
 
 /* Perfil Container */
 .perfil-container {
     width: 100%;
     max-width: 500px;
-    background: white;
+    background: #f1f8e9;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     margin: 20px auto;
     padding: 20px;
+    align-content: center;
 }
 
 /* Seção de Informações do Perfil */
 .perfil-informacoes {
-    background-color: #e8f5e9;
+    background-color: #e6f3e8 ;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
+    align-content: center;
+    text-align: center;
 }
 
 .perfil-informacoes h2 {
-    color: #0a730d;
+    color: #20b374 ;
     margin-bottom: 15px;
     text-align: center;
+    align-content: center;
 }
 
 .perfil-informacoes p {
     margin-bottom: 10px;
     color: #333;
+    /* put in center */
+    text-align: center;
+    align-content: center;
 }
 
 /* Botões de Ação */
@@ -99,7 +63,7 @@ header nav ul li a:hover {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #0a730d;
+    background-color: #20b374;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -109,7 +73,7 @@ header nav ul li a:hover {
 }
 
 .perfil-acoes button:hover {
-    background-color: #08670c;
+    background-color: #2ecc71  ;
 }
 
 /* Botão de Registro (Perfil) */
@@ -131,8 +95,10 @@ header nav ul li a:hover {
 .points-container {
     display: flex;
     align-items: center;
+    justify-content: center; /* Adiciona centralização horizontal */
+    text-align: center;
     gap: 5px;
-    color: #0a730d;
+    color: #333;
     font-weight: bold;
 }
 
@@ -140,7 +106,9 @@ header nav ul li a:hover {
     width: 24px;
     height: 24px;
     vertical-align: middle;
+    object-fit: contain;
 }
+
 
 #btn-trocar-senha a {
     color: inherit;
@@ -149,11 +117,12 @@ header nav ul li a:hover {
 
 /* Estatísticas Container */
 #estatisticas-container {
-    background-color: #e8f5e9;
+    background-color: #e6f3e8;
     border-radius: 8px;
     padding: 20px;
     margin-top: 20px;
     display: none;
+
 }
 
 #estatisticas-container.visible {
@@ -165,6 +134,7 @@ header nav ul li a:hover {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+
 }
 
 /* Left Column Styling */
@@ -172,6 +142,7 @@ header nav ul li a:hover {
     display: flex;
     flex-direction: column;
     gap: 15px;
+
 }
 
 #estatisticas-container .left-column {
@@ -179,10 +150,11 @@ header nav ul li a:hover {
     flex-direction: column;
     gap: 15px;
     align-items: center; /* Centers the content within the left column */
+
 }
 
 #estatisticas-container .left-column .trash-by-type {
-    background-color: #fff;
+    background: #f1f8e9;
     padding: 15px;
     border-radius: 5px;
     text-align: center; /* Centers the text within the box */
@@ -210,7 +182,7 @@ header nav ul li a:hover {
 }
 
 #estatisticas-container .stat-item {
-    background-color: #fff;
+    background: #f1f8e9;
     padding: 10px;
     border-radius: 5px;
     text-align: center;
@@ -218,7 +190,7 @@ header nav ul li a:hover {
 
 /* Headings and Content Styling */
 #estatisticas-container h3 {
-    color: #0a730d;
+    color: #20b374;
     text-align: center;
     margin-bottom: 20px;
 }
