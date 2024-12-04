@@ -43,7 +43,7 @@
 }
 
 .personal-card {
-    background-color: #f0f6e8 ;
+    background-color: #f0f4f0;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -94,7 +94,7 @@
 }
 
 .ranking-container {
-    max-height: 250px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
