@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from user import User
 from database_connection import *
 from main import view_ranking, fetch_site_statistics, display_recycling_locations, fetch_all_stores_from_db, buy_coupon2
@@ -43,7 +43,6 @@ def register():
     email = request.form['email-signup']
     password = request.form['password-signup']
 
-    # Create a new user
     new_user = User(name, email, password)
     if save_user_to_db(new_user):
         flash("Cadastro realizado com sucesso!", "success")
@@ -61,10 +60,9 @@ def login():
     email = request.form['email']
     password = request.form['password']
 
-    # Fetch user from database
     user = fetch_user_by_email(email)
     if user and user.verify_password(password):
-        session['user_id'] = user.id  # Save user in session
+        session['user_id'] = user.id
         return redirect(url_for('home_page', uid=user.id))
     else:
         flash("E-mail ou senha incorretos.", "error")
@@ -125,22 +123,25 @@ def profile():
 
 @app.route('/sitestats')
 def sitestats_page():
-    logged = True
+    logged = session.get('user_id') is not None
     stats = fetch_site_statistics()
     return render_template('sitestats_page.html', statistics=stats, logged=logged)
 @app.route('/sitestats', methods=['POST'])
 def sitestats():
     return
 
-@app.route('/buy_coupon')
-def buyCoupon(store_name, selected_coupon):
-    b = buy_coupon2(store_name, selected_coupon, session.get('user_id'))
-    if b:
-        flash("Cupom resgatado com sucesso!", "success")
-    else:
-        flash("Falha ao resgatar o cupom.", "error")
-    return
+@app.route('/buy_coupon', methods=['POST'])
+def buy_coupon():
+    data = request.json
+    store_name = data.get('store_name')
+    selected_coupon = data.get('selected_coupon')
+    user_id = session.get('user_id')
 
+    success, code = buy_coupon2(store_name, selected_coupon, user_id)
+    if success:
+        return jsonify({'message': f'Cupom resgatado com sucesso!\nCode: {code}'}), 200
+    else:
+        return jsonify({'message': 'Falha ao resgatar o cupom.'}), 400
 
 if __name__ == "__main__":
     app.run(debug=True)

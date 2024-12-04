@@ -121,14 +121,14 @@ def buy_coupon2(store_name, selected_coupon, uid):
     # Find the store by name
     for store in stores:
         if store.name.strip() == store_name.strip():
-
-            if store.redeem_coupon(selected_coupon, user_obj):
+            success, code = store.redeem_coupon(selected_coupon, user_obj)
+            if success:
                 update_user_in_db(user_obj)  # Update the user in the database
                 print(f"Cupom {selected_coupon} resgatado com sucesso!")
-                return True
+                return True, code
             else:
                 print("Falha ao resgatar o cupom.")
-            return False
+            return False, None
 
 def fetch_recycling_locations():
     url = "https://geo.salvador.ba.gov.br/arcgis/rest/services/Hosted/cooperativas_p/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"

@@ -19,7 +19,7 @@ class Store:
                     self.times_traded += 1
                     self.points_traded += coupon_obj.price
                     print(f"Código do cupom: {coupon_obj.code}")
-                    return True  # Coupon successfully redeemed
+                    return True, coupon_obj.code  # Coupon successfully redeemed
 
         print("Falha na transação. Cupom não encontrado ou pontos insuficientes.")
         return False

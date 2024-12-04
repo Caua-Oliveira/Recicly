@@ -133,8 +133,6 @@ def fetch_user_by_id(user_id):
 
         # Retrieve the specific user's data using the user_id
         user_data = users_ref.child(user_id).get()
-        print(user_data)
-        print(type(user_data))
         if user_data:
             # Extract statistics if they exist
             stats_data = user_data.get('statistics', {})
