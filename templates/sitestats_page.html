@@ -76,11 +76,73 @@
                             <span>{{ statistics.trash_by_type.organic|round(2) }} kg</span>
                         </div>
                     </div>
+                    <div class="chart-container">
+                        <canvas id="trashPieChart"></canvas>
+                    </div>
+
                 </div>
             </div>
         </section>
     </main>
 
+       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Pass data from Flask to JavaScript
+            const trashData = {
+                plastic: parseFloat("{{ statistics.trash_by_type.plastic|round(2) }}"),
+                metal: parseFloat("{{ statistics.trash_by_type.metal|round(2) }}"),
+                paper: parseFloat("{{ statistics.trash_by_type.paper|round(2) }}"),
+                glass: parseFloat("{{ statistics.trash_by_type.glass|round(2) }}"),
+                organic: parseFloat("{{ statistics.trash_by_type.organic|round(2) }}")
+            };
+
+            // Calculate percentages
+            const totalWeight = Object.values(trashData).reduce((a, b) => a + b, 0);
+            const trashPercentages = Object.keys(trashData).map(type => ((trashData[type] / totalWeight) * 100).toFixed(2));
+
+            // Chart.js configuration for Pie Chart
+            const ctx = document.getElementById('trashPieChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Plástico', 'Metal', 'Papel', 'Vidro', 'Orgânico'],
+                    datasets: [{
+                        data: trashPercentages,
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2.5,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    const label = tooltipItem.label || '';
+                                    const value = tooltipItem.raw;
+                                    return `${label}: ${value}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
   <!-- Rodapé -->
   <footer id="contato">
     <p>Interessado? <a href="mailto:contato@recicly.com">Entre em contato</a></p>

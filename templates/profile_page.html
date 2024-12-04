@@ -30,7 +30,7 @@
       <p><strong>Pontos:</strong>
         <span class="points-container">
           <img src="{{ url_for('static', filename='images/coin.png') }}" alt="Coin" class="coin-icon">
-          {{ points }}
+          {{ points|int }}
         </span>
       </p>
     </section>
@@ -45,16 +45,16 @@
         <!-- Left Column -->
         <div class="left-column">
             <div class="stat-item">
-                <strong>Total de Lixo Reciclado (kg)</strong>
-                <p id="total-trash-amount">{{ total_trash_amount }}</p>
+                <strong>Total de Lixo Reciclado</strong>
+                <p id="total-trash-amount">{{ total_trash_amount }} kg</p>
             </div>
             <div class="stat-item trash-by-type">
-                <strong>Lixo por Tipo (kg)</strong>
-                <p>Plástico: {{ trash_by_type.plastic }}</p>
-                <p>Metal: {{ trash_by_type.metal }}</p>
-                <p>Papel: {{ trash_by_type.paper }}</p>
-                <p>Vidro: {{ trash_by_type.glass }}</p>
-                <p>Orgânico: {{ trash_by_type.organic }}</p>
+                <strong>Lixo por Tipo</strong>
+                <p>Plástico: {{ trash_by_type.plastic }} kg</p>
+                <p>Metal: {{ trash_by_type.metal }} kg</p>
+                <p>Papel: {{ trash_by_type.paper }} kg</p>
+                <p>Vidro: {{ trash_by_type.glass }} kg</p>
+                <p>Orgânico: {{ trash_by_type.organic }} kg</p>
             </div>
         </div>
 
@@ -62,19 +62,19 @@
         <div class="right-column">
             <div class="stat-item">
                 <strong>Pontos Atuais</strong>
-                <p id="current points">{{ current_points }}</p>
+                <p id="current points">{{ current_points|int }}</p>
             </div>
             <div class="stat-item">
                 <strong>Pontos Recebidos</strong>
-                <p id="total-points">{{ all_time_points }}</p>
+                <p id="total-points">{{ all_time_points|int }}</p>
             </div>
             <div class="stat-item">
                 <strong>Pontos Trocados</strong>
-                <p id="points-traded">{{ points_traded }}</p>
+                <p id="points-traded">{{ points_traded|int }}</p>
             </div>
             <div class="stat-item">
                 <strong>Número de Trocas</strong>
-                <p id="number-of-trades">{{ number_of_trades }}</p>
+                <p id="number-of-trades">{{ number_of_trades|int }}</p>
             </div>
         </div>
     </div>
