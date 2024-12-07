@@ -59,6 +59,7 @@ def view_ranking(uid):
         sorted_users = sorted(users, key=lambda user: user.statistics.total_trash_amount, reverse=True)
         ranking_data = []
         user_rank = {'trash_amount': 0, 'position': 'N/A', 'name': 'N/A'}
+
         for rank, user in enumerate(sorted_users, start=1):
             if user.id == uid:
                 user_rank = {
@@ -118,12 +119,11 @@ def buy_coupon2(store_name, selected_coupon, uid):
     stores = fetch_all_stores_from_db()
     user_obj = fetch_user_by_id(uid)
 
-    # Find the store by name
     for store in stores:
         if store.name.strip() == store_name.strip():
             success, code = store.redeem_coupon(selected_coupon, user_obj)
             if success:
-                update_user_in_db(user_obj)  # Update the user in the database
+                update_user_in_db(user_obj)
                 print(f"Cupom {selected_coupon} resgatado com sucesso!")
                 return True, code
             else:
@@ -211,7 +211,7 @@ def main():
             admin = admin_sign_in()
             if admin:
                 print("Acesso ao painel de administrador.")
-                # Add admin-specific options here if needed
+
 
         elif choice == '4':
             user_email = input("Digite o email do usuário: ")

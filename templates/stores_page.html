@@ -7,22 +7,22 @@
 </head>
 <body>
     <header>
-    <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+    <div class="logo"><a href="{{ url_for('home_page') }}">RECICLY</a></div>
     <nav>
       <ul>
         {% if logged %}
-            <li><a href="{{ url_for('places') }}">Locais Próximos</a></li>
-            <li><a href="{{ url_for('stores') }}">Loja</a></li>
+            <li><a href="{{ url_for('places_page') }}">Locais Próximos</a></li>
+            <li><a href="{{ url_for('stores_page') }}">Loja</a></li>
         {% endif %}
-        <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
-        <li><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
+        <li><a href="{{ url_for('rankings_page') }}">Rankings</a></li>
+        <li><a href="{{ url_for('sitestats_page') }}">Estatísticas</a></li>
       </ul>
     </nav>
     <div class="registro">
       {% if logged %}
-            <a href="{{ url_for('profile') }}" class="btn-register">Perfil</a>
+            <a href="{{ url_for('profile_page') }}" class="btn-register">Perfil</a>
         {% else %}
-            <a href="{{ url_for('register') }}" class="btn-register">Registrar-se</a>
+            <a href="{{ url_for('register_page') }}" class="btn-register">Registrar-se</a>
         {% endif %}
     </div>
   </header>

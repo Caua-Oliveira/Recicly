@@ -19,22 +19,13 @@ class Store:
                     self.times_traded += 1
                     self.points_traded += coupon_obj.price
                     print(f"Código do cupom: {coupon_obj.code}")
-                    return True, coupon_obj.code  # Coupon successfully redeemed
+                    return True, coupon_obj.code
 
         print("Falha na transação. Cupom não encontrado ou pontos insuficientes.")
         return False
 
     def add_coupon(self, name, bio, price, code):
         self.coupons[name] = Coupon(name, bio, price, code)
-
-    def modify_coupon(self, name, bio=None, price=None, code=None):
-        if name in self.coupons:
-            if bio:
-                self.coupons[name].bio = bio
-            if price:
-                self.coupons[name].price = price
-            if code:
-                self.coupons[name].code = code
 
     def remove_coupon(self, name):
         if name in self.coupons:

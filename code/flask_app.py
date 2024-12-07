@@ -3,7 +3,6 @@ from user import User
 from database_connection import *
 from main import view_ranking, fetch_site_statistics, display_recycling_locations, fetch_all_stores_from_db, buy_coupon2
 
-
 # Flask app with custom templates and static paths
 app = Flask(
     __name__,
@@ -12,27 +11,33 @@ app = Flask(
 )
 app.secret_key = "secret_key"
 
-# Routes for main navigation
+# ------------------------------
+# Helper Functions
+# ------------------------------
+def is_logged_in():
+    """Check if a user is logged in."""
+    return session.get('user_id') is not None
+
+# ------------------------------
+# Routes
+# ------------------------------
+
+# Home and Navigation
 @app.route('/')
 def start():
     return redirect(url_for('home_page'))
 
 @app.route('/home')
 def home_page():
-    logged = False
-    if session.get('user_id') is not None:
-        logged = True
+    logged = is_logged_in()
     return render_template('home_page.html', logged=logged)
-
-@app.route('/home', methods=['POST'])
-def home():
-    return
 
 @app.route('/sair')
 def sair():
     session.pop('user_id', None)
     return redirect(url_for('home_page'))
 
+# User Authentication
 @app.route('/register')
 def register_page():
     return render_template('register_page.html')
@@ -63,72 +68,37 @@ def login():
     user = fetch_user_by_email(email)
     if user and user.verify_password(password):
         session['user_id'] = user.id
-        return redirect(url_for('home_page', uid=user.id))
+        return redirect(url_for('home_page'))
     else:
         flash("E-mail ou senha incorretos.", "error")
         return redirect(url_for('login_page'))
 
+# Rankings
 @app.route('/rankings')
 def rankings_page():
-    logged = False
-    if session.get('user_id') is not None:
-        logged = True
-        user_obj = fetch_user_by_id(session['user_id'])
-        ranking_data, user_rank = view_ranking(user_obj.id)
-    else:
-        ranking_data, user_rank = view_ranking('0')
+    logged = is_logged_in()
+    user_id = session.get('user_id', '0')
+    ranking_data, user_rank = view_ranking(user_id)
 
-    return render_template('rankings_page.html',
-                            ranking_data=ranking_data,
-                            user_rank=user_rank,
-                            logged=logged)
+    return render_template(
+        'rankings_page.html',
+        ranking_data=ranking_data,
+        user_rank=user_rank,
+        logged=logged
+    )
 
-
-@app.route('/rankings', methods=['POST'])
-def rankings():
-    return
-
+# Recycling Locations
 @app.route('/places')
 def places_page():
-    display_recycling_locations()
-    return render_template('places_page.html', locations_with_distances=display_recycling_locations())
+    locations = display_recycling_locations()
+    return render_template('places_page.html', locations_with_distances=locations)
 
-@app.route('/places', methods=['POST'])
-def places():
-    return
-
+# Stores and Coupons
 @app.route('/stores')
 def stores_page():
-    logged = True
+    logged = is_logged_in()
     stores = fetch_all_stores_from_db()
     return render_template('stores_page.html', stores=stores, logged=logged)
-
-@app.route('/stores', methods=['POST'])
-def stores():
-    return
-
-@app.route('/profile')
-def profile_page():
-    user_obj = fetch_user_by_id(session.get('user_id'))
-    if user_obj:
-        user_stats = user_obj.to_dict()
-        return render_template('profile_page.html', **user_stats)
-    else:
-        flash("Usuário não encontrado.", "error")
-        return redirect(url_for('home_page'))
-
-@app.route('/profile', methods=['POST'])
-def profile():
-    return
-
-@app.route('/sitestats')
-def sitestats_page():
-    logged = session.get('user_id') is not None
-    stats = fetch_site_statistics()
-    return render_template('sitestats_page.html', statistics=stats, logged=logged)
-@app.route('/sitestats', methods=['POST'])
-def sitestats():
-    return
 
 @app.route('/buy_coupon', methods=['POST'])
 def buy_coupon():
@@ -142,6 +112,26 @@ def buy_coupon():
         return jsonify({'message': f'Cupom resgatado com sucesso!\nCode: {code}'}), 200
     else:
         return jsonify({'message': 'Falha ao resgatar o cupom.'}), 400
+
+# Profile
+@app.route('/profile')
+def profile_page():
+    user_id = session.get('user_id')
+    user_obj = fetch_user_by_id(user_id)
+    if user_obj:
+        user_stats = user_obj.to_dict()
+        return render_template('profile_page.html', **user_stats)
+    else:
+        flash("Usuário não encontrado.", "error")
+        return redirect(url_for('home_page'))
+
+# Site Statistics
+@app.route('/sitestats')
+def sitestats_page():
+    logged = is_logged_in()
+    stats = fetch_site_statistics()
+    return render_template('sitestats_page.html', statistics=stats, logged=logged)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

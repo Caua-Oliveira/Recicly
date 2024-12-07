@@ -6,7 +6,7 @@ import admin
 from store import Store
 from coupon import Coupon
 
-# Initialize Firebase app (you'll need to replace 'path/to/serviceAccountKey.json' with your actual path)
+
 cred = credentials.Certificate("reciclagem-d96e3-firebase-adminsdk-omcdz-0eeb40815c.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://reciclagem-d96e3-default-rtdb.firebaseio.com/'
@@ -55,10 +55,8 @@ def fetch_all_users_from_db():
         users_ref = db.reference('users')
         users_data = users_ref.get()
         users = []
-
         for id, user_data in users_data.items():
             stats_data = user_data.get('statistics', {})
-
             statistics = UserStatistics()
             statistics.total_trash_amount = stats_data.get('total_trash_amount', 0)
             statistics.trash_by_type = stats_data.get('trash_by_type', {
@@ -82,7 +80,6 @@ def fetch_all_users_from_db():
                 statistics=statistics
             )
             users.append(user_obj)
-
         return users
     except Exception as e:
         print(f"Error fetching users from database: {e}")
@@ -128,16 +125,12 @@ def fetch_user_by_email(email):
 
 def fetch_user_by_id(user_id):
     try:
-        # Access the users database reference
         users_ref = db.reference('users')
-
-        # Retrieve the specific user's data using the user_id
         user_data = users_ref.child(user_id).get()
+
         if user_data:
-            # Extract statistics if they exist
             stats_data = user_data.get('statistics', {})
 
-            # Populate the UserStatistics object
             statistics = UserStatistics()
             statistics.total_trash_amount = stats_data.get('total_trash_amount', 0)
             statistics.trash_by_type = stats_data.get('trash_by_type', {
@@ -162,7 +155,6 @@ def fetch_user_by_id(user_id):
                 statistics=statistics
             )
 
-        # If no user data is found for the given user_id
         return None
 
     except Exception as e:
@@ -255,11 +247,8 @@ def fetch_all_stores_from_db():
 
 def fetch_site_statistics():
     try:
-        # Reference to the users in the database
         users_ref = db.reference('users')
         users_data = users_ref.get()
-
-        # Initialize site-wide statistics
         total_trash_amount = 0
         trash_by_type = {
             'plastic': 0,
@@ -273,11 +262,8 @@ def fetch_site_statistics():
         points_traded = 0
         number_of_trades = 0
 
-        # Iterate through each user's data to accumulate statistics
         for id, user_data in users_data.items():
             stats_data = user_data.get('statistics', {})
-
-            # Accumulate total trash and trash by type
             total_trash_amount += stats_data.get('total_trash_amount', 0)
             for trash_type, amount in stats_data.get('trash_by_type', {}).items():
                 if trash_type in trash_by_type:
@@ -289,7 +275,6 @@ def fetch_site_statistics():
             points_traded += stats_data.get('points_traded', 0)
             number_of_trades += stats_data.get('number_of_trades', 0)
 
-        # Prepare the final statistics dictionary
         site_statistics = {
             'total_trash_amount': total_trash_amount,
             'trash_by_type': trash_by_type,
@@ -298,7 +283,6 @@ def fetch_site_statistics():
             'points_traded': points_traded,
             'number_of_trades': number_of_trades
         }
-
         return site_statistics
     except Exception as e:
         print(f"Error fetching site statistics: {e}")

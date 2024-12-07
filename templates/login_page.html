@@ -9,15 +9,15 @@
 <body>
     <!-- Cabeçalho -->
   <header>
-    <div class="logo"><a href="{{ url_for('home') }}">RECICLY</a></div>
+    <div class="logo"><a href="{{ url_for('home_page') }}">RECICLY</a></div>
     <nav>
       <ul>
-        <li><a href="{{ url_for('rankings') }}">Rankings</a></li>
-        <li><a href="{{ url_for('sitestats') }}">Estatísticas</a></li>
+        <li><a href="{{ url_for('rankings_page') }}">Rankings</a></li>
+        <li><a href="{{ url_for('sitestats_page') }}">Estatísticas</a></li>
       </ul>
     </nav>
     <div class="registro">
-      <a href="{{ url_for('register') }}" class="btn-register">Registrar-se</a>
+      <a href="{{ url_for('register_page') }}" class="btn-register">Registrar-se</a>
     </div>
   </header>
 

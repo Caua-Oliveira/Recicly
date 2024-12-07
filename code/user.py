@@ -33,7 +33,6 @@ class User:
             ]
         }
 
-        # Points statistics data
         points_data = {
             "Metric": [
                 "Pontos disponíveis",
