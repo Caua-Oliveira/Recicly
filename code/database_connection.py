@@ -8,7 +8,7 @@ from code.coupon import Coupon
 import os
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-firebase_cert_path = os.path.join(base_dir, "reciclagem-d96e3-firebase-adminsdk-omcdz-164bf496ad.json")
+firebase_cert_path = os.path.join(base_dir, "reciclagem-d96e3-firebase-adminsdk-omcdz-8ec064bdc8.json")
 # Initialize Firebase app (you'll need to replace 'path/to/serviceAccountKey.json' with your actual path)
 cred = credentials.Certificate(firebase_cert_path)
 firebase_admin.initialize_app(cred, {
