@@ -1,13 +1,16 @@
 import firebase_admin
 from firebase_admin import credentials, db
-import user
-from user_statistics import *
-import admin
-from store import Store
-from coupon import Coupon
+import code.user
+from code.user_statistics import *
+import code.admin
+from code.store import Store
+from code.coupon import Coupon
+import os
 
-
-cred = credentials.Certificate("reciclagem-d96e3-firebase-adminsdk-omcdz-0eeb40815c.json")
+base_dir = os.path.dirname(os.path.abspath(__file__))
+firebase_cert_path = os.path.join(base_dir, "reciclagem-d96e3-firebase-adminsdk-omcdz-164bf496ad.json")
+# Initialize Firebase app (you'll need to replace 'path/to/serviceAccountKey.json' with your actual path)
+cred = credentials.Certificate(firebase_cert_path)
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://reciclagem-d96e3-default-rtdb.firebaseio.com/'
 })
@@ -71,7 +74,7 @@ def fetch_all_users_from_db():
             statistics.points_traded = stats_data.get('points_traded', 0)
             statistics.number_of_trades = stats_data.get('number_of_trades', 0)
 
-            user_obj = user.User(
+            user_obj = code.user.User(
                 name=user_data['name'],
                 email=user_data['email'],
                 password=user_data['password'].encode('utf-8'),
@@ -109,7 +112,7 @@ def fetch_user_by_email(email):
                 statistics.points_traded = stats_data.get('points_traded', 0)
                 statistics.number_of_trades = stats_data.get('number_of_trades', 0)
 
-                return user.User(
+                return code.user.User(
                     name=user_data['name'],
                     email=user_data['email'],
                     password=user_data['password'].encode('utf-8'),
@@ -146,7 +149,7 @@ def fetch_user_by_id(user_id):
             statistics.number_of_trades = stats_data.get('number_of_trades', 0)
 
             # Return a User object with the fetched data
-            return user.User(
+            return code.user.User(
                 name=user_data['name'],
                 email=user_data['email'],
                 password=user_data['password'].encode('utf-8'),
@@ -195,7 +198,7 @@ def fetch_admin_by_code(code):
         admins = admins_ref.get()
         for admin_code, admin_data in admins.items():
             if admin_data['code'] == code:
-                return admin.Admin(
+                return code.admin.Admin(
                     code = admin_data['code'],
                     password = admin_data['password']
                 )

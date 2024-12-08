@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog
-from main import *
+from code.main import *
 
 # Initialize global data (coordinates)
 def initialize_global_data():

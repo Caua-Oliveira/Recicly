@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from user import fetch_user_by_email
+from code.user import fetch_user_by_email
 
 app = Flask(__name__)
 

@@ -1,6 +1,6 @@
-from user_statistics import UserStatistics
+from code.user_statistics import UserStatistics
 import bcrypt
-from database_connection import *
+from code.database_connection import *
 import pandas as pd
 
 class User:

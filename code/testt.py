@@ -1,7 +1,6 @@
 
-from store import Store
-from database_connection import *
-from coupon import Coupon
+from code.database_connection import *
+from code.coupon import Coupon
 def add_store():
     store_name = input("Nome da loja: ")
     store_bio = input("Bio da loja: ")

@@ -2,10 +2,8 @@ import urllib.request
 import json
 import geocoder
 from geopy.distance import geodesic
-from store import Store
-from admin import Admin
-from database_connection import *
-from user import User
+from code.database_connection import *
+from code.user import User
 
 def initialize_global_data():
     global my_coords

@@ -1,4 +1,4 @@
-from database_connection import *
+from code.database_connection import *
 
 class Collection_Location:
     def __init__(self, name, address, contact, coordinates):

@@ -1,4 +1,4 @@
-from coupon import Coupon
+from code.coupon import Coupon
 
 class Store:
     def __init__(self, store_name, store_bio):

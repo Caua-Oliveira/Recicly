@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from user import User
-from database_connection import *
-from main import view_ranking, fetch_site_statistics, display_recycling_locations, fetch_all_stores_from_db, buy_coupon2
+from code.user import User
+from code.database_connection import *
+from code.main import view_ranking, fetch_site_statistics, display_recycling_locations, fetch_all_stores_from_db, buy_coupon2
 
 # Flask app with custom templates and static paths
 app = Flask(
@@ -134,4 +134,4 @@ def sitestats_page():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
