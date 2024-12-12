@@ -34,17 +34,6 @@ def sign_in():
     else:
         print("Email ou senha incorretos. Tente novamente.")
 
-def admin_sign_in():
-    print("Admin Login")
-    admin_code = input("Admin Code: ")
-    password = input("Senha: ")
-    admin_obj = fetch_admin_by_code(admin_code)
-    if admin_obj:
-        print(f"Admin Menu")
-        return admin_obj
-    else:
-        print("Credenciais inválidas.")
-        return None
 
 def view_statistics(user_obj):
     print(f"Estatísticas de {user_obj.name}:")
@@ -186,9 +175,8 @@ def main():
         print("\n=== Recicly - Menu Principal ===")
         print("1. Cadastrar-se")
         print("2. Login")
-        print("3. Admin Login")
-        print("4. Entrega de lixo reciclável")
-        print("5. Sair")
+        print("3. Entrega de lixo reciclável")
+        print("4. Sair")
 
         choice = input("Escolha uma opção: ")
 
@@ -202,18 +190,12 @@ def main():
                 user_menu(current_user)
 
         elif choice == '3':
-            admin = admin_sign_in()
-            if admin:
-                print("Acesso ao painel de administrador.")
-
-
-        elif choice == '4':
             user_email = input("Digite o email do usuário: ")
             user_obj = fetch_user_by_email(user_email)
             if user_obj:
                 deliver_trash(user_obj)
 
-        elif choice == '5':
+        elif choice == '4':
             print("Saindo... Até mais!")
             break
 

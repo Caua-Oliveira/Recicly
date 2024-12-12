@@ -56,7 +56,7 @@ class ReciclyApp:
         code = simpledialog.askstring("Admin Login", "Admin Code:")
         password = simpledialog.askstring("Admin Login", "Senha:", show="*")
 
-        admin = fetch_admin_by_code(code)  # Call your existing function
+        admin = False
         if admin:
             messagebox.showinfo("Sucesso", "Acesso concedido ao painel do administrador.")
         else:
