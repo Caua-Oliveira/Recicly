@@ -3,11 +3,10 @@ from code.user import User
 from code.database_connection import *
 from code.main import view_ranking, fetch_site_statistics, display_recycling_locations, fetch_all_stores_from_db, buy_coupon2
 
-# Flask app with custom templates and static paths
 app = Flask(
     __name__,
-    template_folder="../templates",  # Adjust path for templates
-    static_folder="../static"        # Adjust path for static files
+    template_folder="../templates",
+    static_folder="../static"
 )
 app.secret_key = "secret_key"
 
@@ -37,7 +36,6 @@ def sair():
     session.pop('user_id', None)
     return redirect(url_for('home_page'))
 
-# User Authentication
 @app.route('/register')
 def register_page():
     return render_template('register_page.html')
@@ -73,7 +71,6 @@ def login():
         flash("E-mail ou senha incorretos.", "error")
         return redirect(url_for('login_page'))
 
-# Rankings
 @app.route('/rankings')
 def rankings_page():
     logged = is_logged_in()
@@ -87,13 +84,11 @@ def rankings_page():
         logged=logged
     )
 
-# Recycling Locations
 @app.route('/places')
 def places_page():
     locations = display_recycling_locations()
     return render_template('places_page.html', locations_with_distances=locations)
 
-# Stores and Coupons
 @app.route('/stores')
 def stores_page():
     logged = is_logged_in()
@@ -113,7 +108,6 @@ def buy_coupon():
     else:
         return jsonify({'message': 'Falha ao resgatar o cupom.'}), 400
 
-# Profile
 @app.route('/profile')
 def profile_page():
     user_id = session.get('user_id')
@@ -125,7 +119,6 @@ def profile_page():
         flash("Usuário não encontrado.", "error")
         return redirect(url_for('home_page'))
 
-# Site Statistics
 @app.route('/sitestats')
 def sitestats_page():
     logged = is_logged_in()

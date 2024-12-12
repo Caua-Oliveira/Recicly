@@ -52,7 +52,6 @@ class User:
         trash_df = pd.DataFrame(trash_data)
         points_df = pd.DataFrame(points_data)
 
-        # Display DataFrames separately
         print("Trash Statistics:")
         print(trash_df)
         print("\nPoints Statistics:")

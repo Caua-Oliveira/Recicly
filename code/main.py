@@ -93,19 +93,15 @@ def buy_coupon(user_obj):
     stores = fetch_all_stores_from_db()
     store_name = input("Digite o nome da loja: ")
 
-    # Find the store by name
     for store in stores:
         if store.name.strip() == store_name.strip():
             print(f"Cupons disponíveis em {store_name}:")
 
-            # Display available coupons
             for coupon_code, coupon_data in store.coupons.items():
                 print(f"{coupon_data.name.strip()} - {coupon_data.price} pontos")
 
-            # Get the coupon name from the user
             selected_coupon = input("Digite o nome do cupom: ")
 
-            # Attempt to redeem the coupon
             if store.redeem_coupon(selected_coupon, user_obj):
                 update_user_in_db(user_obj)  # Update the user in the database
                 print(f"Cupom {selected_coupon} resgatado com sucesso!")
@@ -154,17 +150,17 @@ def display_recycling_locations():
 
     return locations_with_distances
 
-    # print("\nLocais de Reciclagem na Cidade:\n")
-    # for distance, properties, coordinates in locations_with_distances:
-    #     name = properties.get('nome', 'N/A')
-    #     address = properties.get('endereço', 'N/A')
-    #     contact = properties.get('contato', 'N/A')
-    #
-    #     print(f"Nome: {name}")
-    #     print(f"Endereço: {address}")
-    #     print(f"Contato: {contact}")
-    #     print(f"Coordenadas: {coordinates}")
-    #     print(f"Distância: {distance:.2f} km\n")
+    print("\nLocais de Reciclagem na Cidade:\n")
+    for distance, properties, coordinates in locations_with_distances:
+        name = properties.get('nome', 'N/A')
+        address = properties.get('endereço', 'N/A')
+        contact = properties.get('contato', 'N/A')
+
+        print(f"Nome: {name}")
+        print(f"Endereço: {address}")
+        print(f"Contato: {contact}")
+        print(f"Coordenadas: {coordinates}")
+        print(f"Distância: {distance:.2f} km\n")
 
 def deliver_trash(user_obj):
     print("Entrega de Lixo")
@@ -260,6 +256,5 @@ def user_menu(user_obj):
             print("Opção inválida. Tente novamente.")
 
 
-# Run the program
 if __name__ == "__main__":
     main()

@@ -10,12 +10,9 @@ class Store:
         self.points_traded = 0
 
     def redeem_coupon(self, coupon_name, user):
-        # Search for the coupon by name
         for coupon_code, coupon_obj in self.coupons.items():
             if coupon_obj.name.strip().lower() == coupon_name.lower():
-                # Check if the user has enough points to redeem the coupon
                 if user.statistics.remove_points(coupon_obj.price):
-                    # Update store statistics
                     self.times_traded += 1
                     self.points_traded += coupon_obj.price
                     print(f"Código do cupom: {coupon_obj.code}")

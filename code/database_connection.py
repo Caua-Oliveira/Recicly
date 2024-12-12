@@ -2,14 +2,12 @@ import firebase_admin
 from firebase_admin import credentials, db
 import code.user
 from code.user_statistics import *
-import code.admin
 from code.store import Store
 from code.coupon import Coupon
 import os
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-firebase_cert_path = os.path.join(base_dir, "reciclagem-d96e3-firebase-adminsdk-omcdz-8ec064bdc8.json")
-# Initialize Firebase app (you'll need to replace 'path/to/serviceAccountKey.json' with your actual path)
+firebase_cert_path = os.path.join(base_dir, "firebase_recicly_example.json")
 cred = credentials.Certificate(firebase_cert_path)
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://reciclagem-d96e3-default-rtdb.firebaseio.com/'
@@ -180,33 +178,6 @@ def update_user_in_db(user):
         print(f"Error updating user in database: {e}")
         return False
 
-def fetch_collection_location_by_login_id(login_id):
-    try:
-        locations_ref = db.reference('collection_locations')
-        locations = locations_ref.get()
-        for location_id, location_data in locations.items():
-            if location_data['login_id'] == login_id:
-                return location_data  # You might want to create a CollectionLocation class and return an instance
-        return None
-    except Exception as e:
-        print(f"Error fetching collection location from database: {e}")
-        return None
-
-def fetch_admin_by_code(code):
-    try:
-        admins_ref = db.reference('admins')
-        admins = admins_ref.get()
-        for admin_code, admin_data in admins.items():
-            if admin_data['code'] == code:
-                return code.admin.Admin(
-                    code = admin_data['code'],
-                    password = admin_data['password']
-                )
-        return None
-    except Exception as e:
-        print(f"Error fetching admin from database: {e}")
-        return None
-
 def fetch_all_stores_from_db():
     try:
         stores_ref = db.reference('stores')
@@ -214,19 +185,16 @@ def fetch_all_stores_from_db():
         stores = []
 
         for store_id, store_data in stores_data.items():
-            # Extract mandatory store attributes
             store_name = store_data['name']
             store_bio = store_data['bio']
             times_traded = store_data['times_traded']
             points_traded = store_data['points_traded']
 
-            # Create a Store object
             store_obj = Store(store_name=store_name, store_bio=store_bio)
             store_obj.id = store_id
             store_obj.times_traded = times_traded
             store_obj.points_traded = points_traded
 
-            # Extract and add coupons to the store
             coupons_data = store_data['coupons']
             for coupon_name, coupon_data in coupons_data.items():
                 coupon_obj = Coupon(
@@ -287,6 +255,7 @@ def fetch_site_statistics():
             'number_of_trades': number_of_trades
         }
         return site_statistics
+
     except Exception as e:
         print(f"Error fetching site statistics: {e}")
         return {
